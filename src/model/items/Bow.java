@@ -1,10 +1,12 @@
 package model.items;
 
+import model.units.IUnit;
+
 /**
  * @author Ignacio Slater Muñoz
- * @since
+ * @since 1.0
  */
-public class Bow extends AbstractItem {
+public class Bow extends AttackItem {
 
   /**
    * Creates a new bow.
@@ -25,5 +27,18 @@ public class Bow extends AbstractItem {
     super(name, power, minRange, maxRange);
     this.minRange = Math.max(minRange, 2);
     this.maxRange = Math.max(maxRange, this.minRange);
+  }
+
+  public void attack(IUnit unit) {
+    if(unit.getCurrentHitPoints()>0){
+      if(unit.getEquippedItem() instanceof Light ||
+              unit.getEquippedItem() instanceof Darkness ||
+              unit.getEquippedItem() instanceof Spirit){
+        unit.setCurrentHitPoints(unit.getCurrentHitPoints()-(int)(1.5*this.getPower()));
+      }
+      else {
+        unit.setCurrentHitPoints(unit.getCurrentHitPoints() - this.getPower());
+      }
+    }
   }
 }

@@ -92,6 +92,30 @@ public interface ITestUnit {
    */
   Bow getBow();
 
+  @Test
+  void equipLightTest();
+
+  /**
+   * @return the test light
+   */
+  Light getLight();
+
+  @Test
+  void equipDarknessTest();
+
+  /**
+   * @return the test darkness
+   */
+  Darkness getDarkness();
+
+  @Test
+  void equipSpiritTest();
+
+  /**
+   * @return the test spirit
+   */
+  Spirit getSpirit();
+
   /**
    * Checks if the unit moves correctly
    */
@@ -107,4 +131,35 @@ public interface ITestUnit {
    * @return the target Alpaca
    */
   Alpaca getTargetAlpaca();
+
+  /**
+   * Checks if the item is setted correctly
+   */
+  @Test
+  void setItemTest();
+
+  /**
+   * Checks if the item is removed correctly
+   */
+  @Test
+  void removeItemTest();
+
+  /**
+   * Checks if the item is given correctly
+   */
+  @Test
+  void giveItemToTest();
+
+  /**
+   * Checks if the unit attacks correctly
+   */
+  @Test
+  void attackToTest();
+
+  /**
+   * Checks if the hit points are set correctly
+   */
+  @Test
+  void setCurrentHitPointsTest();
 }
+

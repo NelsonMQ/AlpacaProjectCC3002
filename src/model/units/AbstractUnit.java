@@ -5,6 +5,8 @@ import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import model.items.AttackItem;
 import model.items.IEquipableItem;
 import model.map.Location;
 
@@ -21,10 +23,11 @@ import model.map.Location;
 public abstract class AbstractUnit implements IUnit {
 
   protected final List<IEquipableItem> items = new ArrayList<>();
-  private final int currentHitPoints;
+  private int currentHitPoints;
   private final int movement;
   protected IEquipableItem equippedItem;
   private Location location;
+  private int maxItems;
 
   /**
    * Creates a new Unit.
@@ -44,6 +47,7 @@ public abstract class AbstractUnit implements IUnit {
     this.movement = movement;
     this.location = location;
     this.items.addAll(Arrays.asList(items).subList(0, min(maxItems, items.length)));
+    this.maxItems = maxItems;
   }
 
   @Override
@@ -67,6 +71,20 @@ public abstract class AbstractUnit implements IUnit {
   }
 
   @Override
+  public void setItem(IEquipableItem item){
+    if(this.items.size()<this.getMaxItems()){
+      this.items.add(item);
+    }
+  }
+
+  @Override
+  public void removeItem(IEquipableItem item){
+    if(this.items.contains(item)){
+      this.items.remove(item);
+    }
+  }
+
+  @Override
   public Location getLocation() {
     return location;
   }
@@ -82,10 +100,38 @@ public abstract class AbstractUnit implements IUnit {
   }
 
   @Override
+  public int getMaxItems() { return maxItems; }
+
+  @Override
   public void moveTo(final Location targetLocation) {
     if (getLocation().distanceTo(targetLocation) <= getMovement()
         && targetLocation.getUnit() == null) {
       setLocation(targetLocation);
     }
+  }
+
+  @Override
+  public void giveItemTo(IUnit unit, IEquipableItem item){
+    if(this.getLocation().distanceTo(unit.getLocation())==1
+        && this.getItems().contains(item)
+        && unit.getItems().size()<unit.getMaxItems()){
+      this.removeItem(item);
+      unit.setItem(item);
+    }
+  }
+
+  @Override
+  public void attackTo(IUnit unit) {
+    double distance = getLocation().distanceTo(unit.getLocation());
+    if(getEquippedItem() instanceof AttackItem &&
+            distance<=getEquippedItem().getMaxRange() &&
+            distance>=getEquippedItem().getMinRange()){
+      ((AttackItem) getEquippedItem()).attack(unit);
+    }
+  }
+
+  @Override
+  public void setCurrentHitPoints(int hitPoints) {
+    this.currentHitPoints = hitPoints;
   }
 }

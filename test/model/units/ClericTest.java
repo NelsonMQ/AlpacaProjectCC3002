@@ -35,4 +35,13 @@ public class ClericTest extends AbstractTestUnit {
     cleric.equipItem(staff);
     assertEquals(staff, cleric.getEquippedItem());
   }
+
+  @Override
+  @Test
+  public void attackToTest() {
+    Sorcerer sorcerer = new Sorcerer(50,2,field.getCell(1, 0));
+    cleric.setEquippedItem(staff);
+    cleric.attackTo(sorcerer);
+    assertEquals(sorcerer.getCurrentHitPoints(),50);
+  }
 }

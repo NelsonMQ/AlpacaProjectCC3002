@@ -45,6 +45,20 @@ public interface IUnit {
   void setEquippedItem(IEquipableItem item);
 
   /**
+   * Add a new item to the unit's items
+   *
+   * @param item
+   *     the item to add
+   */
+  void setItem(IEquipableItem item);
+
+  /**
+   * @param item
+   *    the item to remove
+   */
+  public void removeItem(IEquipableItem item);
+
+  /**
    * @return the current location of the unit
    */
   Location getLocation();
@@ -60,9 +74,41 @@ public interface IUnit {
   int getMovement();
 
   /**
+   *
+   * @return the maximum number of items that the unit can have
+   */
+  int getMaxItems();
+
+  /**
    * Moves this unit to another location.
    * <p>
    * If the other location is out of this unit's movement range, the unit doesn't move.
    */
   void moveTo(Location targetLocation);
+
+  /**
+   * Gives the item to another unit, the distance between units must be 1.
+   * <p>
+   * If the unit doesn't have the item, nothing happens.
+   *
+   * @param unit
+   *      the unit that will give the item.
+   *
+   * @param item
+   *     the item that will be given.
+   */
+  void giveItemTo(IUnit unit, IEquipableItem item);
+
+  /**
+   * Attacks to another unit
+   *
+   * @param unit
+   *    the unit to attack.
+   */
+  void attackTo(IUnit unit);
+
+  /**
+   * Sets the current hit points of the unit
+   */
+  void setCurrentHitPoints(int hitPoints);
 }

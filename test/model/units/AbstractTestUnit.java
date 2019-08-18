@@ -1,14 +1,16 @@
 package model.units;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import model.items.*;
 import model.map.Field;
 import model.map.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Ignacio Slater Muñoz
@@ -23,6 +25,9 @@ public abstract class AbstractTestUnit implements ITestUnit {
   protected Sword sword;
   protected Staff staff;
   protected Spear spear;
+  protected Light light;
+  protected Darkness darkness;
+  protected Spirit spirit;
 
   @Override
   public void setTargetAlpaca() {
@@ -67,6 +72,9 @@ public abstract class AbstractTestUnit implements ITestUnit {
     this.spear = new Spear("Spear", 10, 1, 2);
     this.staff = new Staff("Staff", 10, 1, 2);
     this.bow = new Bow("Bow", 10, 2, 3);
+    this.light = new Light("Light",10,1,2);
+    this.darkness = new Darkness("Darkness",10,1,2);
+    this.spirit = new Spirit("Spirit",10,1,2);
   }
 
   /**
@@ -174,6 +182,33 @@ public abstract class AbstractTestUnit implements ITestUnit {
     return bow;
   }
 
+  @Override
+  @Test
+  public void equipLightTest() { checkEquippedItem(getLight());}
+
+  /**
+   * @return the test light
+   */
+  public Light getLight() { return light; }
+
+  @Override
+  @Test
+  public void equipDarknessTest() { checkEquippedItem(getDarkness());}
+
+  /**
+   * @return the test darkness
+   */
+  public Darkness getDarkness() { return darkness; }
+
+  @Override
+  @Test
+  public void equipSpiritTest() { checkEquippedItem(getSpirit());}
+
+  /**
+   * @return the test spirit
+   */
+  public Spirit getSpirit() { return spirit; }
+
   /**
    * Checks if the unit moves correctly
    */
@@ -205,5 +240,62 @@ public abstract class AbstractTestUnit implements ITestUnit {
   @Override
   public Alpaca getTargetAlpaca() {
     return targetAlpaca;
+  }
+
+  @Override
+  @Test
+  public void setItemTest() {
+    assertEquals(getTestUnit().getItems().size(),0);
+    getTestUnit().setItem(axe);
+    assertTrue(getTestUnit().getItems().contains(axe));
+
+    getTestUnit().setItem(bow);
+    getTestUnit().setItem(sword);
+    assertEquals(getTestUnit().getItems().size(),3);
+
+    getTestUnit().setItem(staff);
+    assertFalse(getTestUnit().getItems().contains(staff));
+  }
+
+  @Override
+  @Test
+  public void removeItemTest() {
+    getTestUnit().removeItem(staff);
+    assertEquals(getTestUnit().getItems().size(),0);
+
+    getTestUnit().setItem(axe);
+    getTestUnit().setItem(sword);
+    getTestUnit().removeItem(axe);
+    assertEquals(getTestUnit().getItems().size(),1);
+    assertFalse(getTestUnit().getItems().contains(axe));
+  }
+
+  @Override
+  @Test
+  public void giveItemToTest() {
+    getTestUnit().setItem(axe);
+    getTestUnit().giveItemTo(targetAlpaca,axe);
+    assertEquals(targetAlpaca.getItems().size(),1);
+    assertTrue(targetAlpaca.getItems().contains(axe));
+
+    targetAlpaca.setLocation(field.getCell(2,2));
+    targetAlpaca.giveItemTo(getTestUnit(),axe);
+    assertFalse(getTestUnit().getItems().contains(axe));
+  }
+
+  @Override
+  @Test
+  public void attackToTest() {
+    assertEquals(getTestUnit().getCurrentHitPoints(),50);
+    targetAlpaca.attackTo(getTestUnit());
+    assertEquals(getTestUnit().getCurrentHitPoints(),50);
+  }
+
+  @Override
+  @Test
+  public void setCurrentHitPointsTest() {
+    assertEquals(getTestUnit().getCurrentHitPoints(),50);
+    getTestUnit().setCurrentHitPoints(30);
+    assertEquals(getTestUnit().getCurrentHitPoints(),30);
   }
 }

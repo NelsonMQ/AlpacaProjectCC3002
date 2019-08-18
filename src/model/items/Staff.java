@@ -8,7 +8,7 @@ package model.items;
  * @author Ignacio Slater Muñoz
  * @since 1.0
  */
-public class Staff extends AbstractItem {
+public class Staff extends NoAttackItem {
 
   /**
    * Creates a new Staff item.
