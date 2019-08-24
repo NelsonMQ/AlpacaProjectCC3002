@@ -38,13 +38,15 @@ public class SwordMasterTest extends AbstractTestUnit {
 
   @Override
   @Test
-  public void attackToTest() {
-    Fighter fighter = new Fighter(10,2,field.getCell(1, 0));
-    swordMaster.setEquippedItem(sword);
-    swordMaster.attackTo(fighter);
-    assertEquals(fighter.getCurrentHitPoints(),0);
+  public void combatTest() {
+    Fighter fighter = new Fighter(20,2,field.getCell(1, 0));
+    sword.equipTo(swordMaster);
+    swordMaster.combat(fighter);
+    assertEquals(10,fighter.getCurrentHitPoints());
 
-    swordMaster.attackTo(fighter);
-    assertEquals(fighter.getCurrentHitPoints(),0);
+    axe.equipTo(fighter);
+    swordMaster.combat(fighter);
+    assertEquals(-5,fighter.getCurrentHitPoints());
+    assertEquals(50,swordMaster.getCurrentHitPoints());
   }
 }

@@ -8,7 +8,7 @@ package model.items;
  * @author Ignacio Slater Muñoz
  * @since 1.0
  */
-public class Staff extends NoAttackItem {
+public class Staff extends AbstractNoAttackItem {
 
   /**
    * Creates a new Staff item.
@@ -24,5 +24,31 @@ public class Staff extends NoAttackItem {
    */
   public Staff(final String name, final int power, final int minRange, final int maxRange) {
     super(name, power, minRange, maxRange);
+  }
+
+  public void receiveAxeDamage(Axe axe) {
+    axe.normalAttack(this.getOwner());
+  }
+
+  public void receiveBowDamage(Bow bow) {
+    bow.normalAttack(this.getOwner());
+  }
+
+  public void receiveSpearDamage(Spear spear) { spear.normalAttack(this.getOwner()); }
+
+  public void receiveSwordDamage(Sword sword) {
+    sword.normalAttack(this.getOwner());
+  }
+
+  public void receiveLightDamage(Light light) {
+    light.strongAttack(this.getOwner());
+  }
+
+  public void receiveDarknessDamage(Darkness darkness) {
+    darkness.strongAttack(this.getOwner());
+  }
+
+  public void receiveSpiritDamage(Spirit spirit) {
+    spirit.strongAttack(this.getOwner());
   }
 }

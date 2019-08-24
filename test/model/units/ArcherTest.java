@@ -45,18 +45,19 @@ public class ArcherTest extends AbstractTestUnit {
 
   @Override
   @Test
-  public void attackToTest() {
+  public void combatTest() {
     Sorcerer sorcerer = new Sorcerer(50,2,field.getCell(1, 0));
-    archer.setEquippedItem(bow);
-    archer.attackTo(sorcerer);
-    assertEquals(sorcerer.getCurrentHitPoints(),50);
+    bow.equipTo(archer);
+    archer.combat(sorcerer);
+    assertEquals(50,sorcerer.getCurrentHitPoints());
 
     sorcerer.setLocation(field.getCell(2, 0));
-    archer.attackTo(sorcerer);
-    assertEquals(sorcerer.getCurrentHitPoints(),40);
+    archer.combat(sorcerer);
+    assertEquals(40,sorcerer.getCurrentHitPoints());
 
-    sorcerer.setEquippedItem(light);
-    archer.attackTo(sorcerer);
-    assertEquals(sorcerer.getCurrentHitPoints(),25);
+    light.equipTo(sorcerer);
+    archer.combat(sorcerer);
+    assertEquals(25,sorcerer.getCurrentHitPoints());
+    assertEquals(35,archer.getCurrentHitPoints());
   }
 }

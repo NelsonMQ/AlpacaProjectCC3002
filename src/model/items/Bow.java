@@ -6,7 +6,7 @@ import model.units.IUnit;
  * @author Ignacio Slater Muñoz
  * @since 1.0
  */
-public class Bow extends AttackItem {
+public class Bow extends AbstractAttackItem {
 
   /**
    * Creates a new bow.
@@ -30,15 +30,40 @@ public class Bow extends AttackItem {
   }
 
   public void attack(IUnit unit) {
-    if(unit.getCurrentHitPoints()>0){
-      if(unit.getEquippedItem() instanceof Light ||
-              unit.getEquippedItem() instanceof Darkness ||
-              unit.getEquippedItem() instanceof Spirit){
-        unit.setCurrentHitPoints(unit.getCurrentHitPoints()-(int)(1.5*this.getPower()));
-      }
-      else {
-        unit.setCurrentHitPoints(unit.getCurrentHitPoints() - this.getPower());
-      }
+    if(unit.getEquippedItem()==null){
+      normalAttack(unit);
+    }
+    else {
+      unit.getEquippedItem().receiveBowDamage(this);
     }
   }
+
+  public void receiveAxeDamage(Axe axe) {
+    normalAttack(this.getOwner());
+  }
+
+  public void receiveBowDamage(Bow bow) {
+    normalAttack(this.getOwner());
+  }
+
+  public void receiveSpearDamage(Spear spear) {
+    normalAttack(this.getOwner());
+  }
+
+  public void receiveSwordDamage(Sword sword) {
+    normalAttack(this.getOwner());
+  }
+
+  public void receiveLightDamage(Light light) {
+    strongAttack(this.getOwner());
+  }
+
+  public void receiveDarknessDamage(Darkness darkness) {
+    strongAttack(this.getOwner());
+  }
+
+  public void receiveSpiritDamage(Spirit spirit) {
+    strongAttack(this.getOwner());
+  }
+
 }

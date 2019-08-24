@@ -100,12 +100,27 @@ public interface IUnit {
   void giveItemTo(IUnit unit, IEquipableItem item);
 
   /**
+   * Checks if the unit can attack to the other one
+   *
+   * @param unit the unit to attack
+   * @return true if can attack
+   */
+  boolean canAttack(IUnit unit);
+
+  /**
    * Attacks to another unit
    *
    * @param unit
    *    the unit to attack.
    */
   void attackTo(IUnit unit);
+
+  /**
+   *The units will fight
+   * @param unit
+   *    the unit to fight
+   */
+  void combat(IUnit unit);
 
   /**
    * Sets the current hit points of the unit

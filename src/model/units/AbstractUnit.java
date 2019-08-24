@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import model.items.AttackItem;
+import model.items.IAttackItem;
 import model.items.IEquipableItem;
 import model.map.Location;
 
@@ -121,12 +121,27 @@ public abstract class AbstractUnit implements IUnit {
   }
 
   @Override
-  public void attackTo(IUnit unit) {
+  public boolean canAttack(IUnit unit) {
     double distance = getLocation().distanceTo(unit.getLocation());
-    if(getEquippedItem() instanceof AttackItem &&
-            distance<=getEquippedItem().getMaxRange() &&
-            distance>=getEquippedItem().getMinRange()){
-      ((AttackItem) getEquippedItem()).attack(unit);
+    return getEquippedItem()!= null &&
+            getEquippedItem().canAttack() &&
+            distance <= getEquippedItem().getMaxRange() &&
+            distance >= getEquippedItem().getMinRange() &&
+            getCurrentHitPoints()>0;
+  }
+
+  @Override
+  public void attackTo(IUnit unit) {
+    if(this.canAttack(unit)){
+      ((IAttackItem) getEquippedItem()).attack(unit);
+    }
+  }
+
+  @Override
+  public void combat(IUnit unit) {
+    this.attackTo(unit);
+    if(unit.canAttack(this)){
+      unit.attackTo(this);
     }
   }
 

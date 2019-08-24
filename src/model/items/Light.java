@@ -11,7 +11,7 @@ import model.units.IUnit;
  * @since 1.1
  */
 
-public class Light extends AttackItem {
+public class Light extends AbstractAttackItem {
 
     /**
      * Creates a new Light item
@@ -29,23 +29,40 @@ public class Light extends AttackItem {
         super(name, power, minRange, maxRange);
     }
 
-    @Override
     public void attack(IUnit unit) {
-        if(unit.getCurrentHitPoints()>0) {
-            if(unit.getEquippedItem() instanceof Darkness ||
-                    unit.getEquippedItem() instanceof Sword ||
-                    unit.getEquippedItem() instanceof Spear ||
-                    unit.getEquippedItem() instanceof Axe ||
-                    unit.getEquippedItem() instanceof Bow) {
-                unit.setCurrentHitPoints(unit.getCurrentHitPoints() - (int)(1.5*this.getPower()));
-            }
-            else if (unit.getEquippedItem() instanceof Spirit){
-                if( this.getPower()-20>0)
-                    unit.setCurrentHitPoints(unit.getCurrentHitPoints() - (this.getPower() - 20));
-            }
-            else{
-                unit.setCurrentHitPoints(unit.getCurrentHitPoints() - this.getPower());
-            }
+        if(unit.getEquippedItem()==null){
+            normalAttack(unit);
         }
+        else {
+            unit.getEquippedItem().receiveLightDamage(this);
+        }
+    }
+
+    public void receiveAxeDamage(Axe axe) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveBowDamage(Bow bow) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveSpearDamage(Spear spear) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveSwordDamage(Sword sword) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveLightDamage(Light light) {
+        normalAttack(this.getOwner());
+    }
+
+    public void receiveDarknessDamage(Darkness darkness) {
+        weakAttack(this.getOwner());
+    }
+
+    public void receiveSpiritDamage(Spirit spirit) {
+        strongAttack(this.getOwner());
     }
 }

@@ -45,4 +45,55 @@ public interface IEquipableItem {
    * @return the maximum range of the item
    */
   int getMaxRange();
+  
+  /**
+   * the unit that has an equipable item receive an attack from sword
+   * @param sword
+   *      the item whose is attacking
+   */
+  void receiveSwordDamage(Sword sword);
+
+  /**
+   *the unit that has an equipable item receive an attack from axe
+   * @param axe
+   *      the item whose is attacking
+   */
+  void receiveAxeDamage(Axe axe);
+
+  /**
+   *the unit that has an equipable item receive an attack from bow
+   * @param bow
+   *      the item whose is attacking
+   */
+  void receiveBowDamage(Bow bow);
+
+  /**
+   *the unit that has an equipable item receive an attack from darkness
+   * @param darkness
+   *      the item whose is attacking
+   */
+  void receiveDarknessDamage(Darkness darkness);
+
+  /**
+   *the unit that has an equipable item receive an attack from light
+   * @param light
+   *      the item whose is attacking
+   */
+  void receiveLightDamage(Light light);
+
+  /**
+   *the unit that has an equipable item receive an attack from spear
+   * @param spear
+   *      the item whose is attacking
+   */
+  void receiveSpearDamage(Spear spear);
+
+  /**
+   *the unit that has an equipable item receive an attack from spirit
+   * @param spirit
+   *      the item whose is attacking
+   */
+  void receiveSpiritDamage(Spirit spirit);
+
+  boolean canAttack();
 }

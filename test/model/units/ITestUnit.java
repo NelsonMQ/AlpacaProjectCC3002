@@ -151,10 +151,16 @@ public interface ITestUnit {
   void giveItemToTest();
 
   /**
-   * Checks if the unit attacks correctly
+   * Checks if the unit can attack
    */
   @Test
-  void attackToTest();
+  void canAttackTest();
+
+  /**
+   * Checks if the unit attacks correctly and checks the combat works correctly
+   */
+  @Test
+  void combatTest();
 
   /**
    * Checks if the hit points are set correctly

@@ -285,10 +285,23 @@ public abstract class AbstractTestUnit implements ITestUnit {
 
   @Override
   @Test
-  public void attackToTest() {
-    assertEquals(getTestUnit().getCurrentHitPoints(),50);
-    targetAlpaca.attackTo(getTestUnit());
-    assertEquals(getTestUnit().getCurrentHitPoints(),50);
+  public void canAttackTest() {
+    assertFalse(getTestUnit().canAttack(targetAlpaca));
+    SwordMaster swordMaster = new SwordMaster(50,2,field.getCell(2, 0));
+    swordMaster.setEquippedItem(sword);
+    assertTrue(swordMaster.canAttack(targetAlpaca));
+
+    Cleric cleric = new Cleric(50,2,field.getCell(2, 0));
+    cleric.setEquippedItem(staff);
+    assertFalse(cleric.canAttack(targetAlpaca));
+  }
+
+  @Override
+  @Test
+  public void combatTest() {
+    targetAlpaca.combat(getTestUnit());
+    assertEquals(50,targetAlpaca.getCurrentHitPoints());
+    assertEquals(50,getTestUnit().getCurrentHitPoints());
   }
 
   @Override

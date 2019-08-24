@@ -11,41 +11,54 @@ import model.units.IUnit;
  * @since 1.1
  */
 
-public class Darkness extends AttackItem {
+public class Darkness extends AbstractAttackItem {
 
     /**
      * Creates a new Darkness item
      *
-     * @param name
-     *     the name of the Darkness
-     * @param power
-     *     the damage of the darkness
-     * @param minRange
-     *     the minimum range of the darkness
-     * @param maxRange
-     *     the maximum range of the darkness
+     * @param name     the name of the Darkness
+     * @param power    the damage of the darkness
+     * @param minRange the minimum range of the darkness
+     * @param maxRange the maximum range of the darkness
      */
     public Darkness(final String name, final int power, final int minRange, final int maxRange) {
         super(name, power, minRange, maxRange);
     }
 
-    @Override
     public void attack(IUnit unit) {
-        if(unit.getCurrentHitPoints()>0) {
-            if(unit.getEquippedItem() instanceof Spirit ||
-                    unit.getEquippedItem() instanceof Sword ||
-                    unit.getEquippedItem() instanceof Spear ||
-                    unit.getEquippedItem() instanceof Axe ||
-                    unit.getEquippedItem() instanceof Bow) {
-                unit.setCurrentHitPoints(unit.getCurrentHitPoints() - (int)(1.5*this.getPower()));
-            }
-            else if (unit.getEquippedItem() instanceof Light){
-                if( this.getPower()-20>0)
-                    unit.setCurrentHitPoints(unit.getCurrentHitPoints() - (this.getPower() - 20));
-            }
-            else{
-                unit.setCurrentHitPoints(unit.getCurrentHitPoints() - this.getPower());
-            }
+        if(unit.getEquippedItem()==null){
+            normalAttack(unit);
         }
+        else {
+            unit.getEquippedItem().receiveDarknessDamage(this);
+        }
+    }
+
+    public void receiveAxeDamage(Axe axe) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveBowDamage(Bow bow) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveSpearDamage(Spear spear) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveSwordDamage(Sword sword) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveLightDamage(Light light) {
+        strongAttack(this.getOwner());
+    }
+
+    public void receiveDarknessDamage(Darkness darkness) {
+        normalAttack(this.getOwner());
+    }
+
+    public void receiveSpiritDamage(Spirit spirit) {
+        weakAttack(this.getOwner());
     }
 }

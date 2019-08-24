@@ -38,14 +38,15 @@ public class HeroTest extends AbstractTestUnit {
 
   @Override
   @Test
-  public void attackToTest() {
+  public void combatTest() {
     Fighter fighter = new Fighter(50,2,field.getCell(1, 0));
-    hero.setEquippedItem(spear);
-    hero.attackTo(fighter);
-    assertEquals(fighter.getCurrentHitPoints(),40);
+    spear.equipTo(hero);
+    hero.combat(fighter);
+    assertEquals(40,fighter.getCurrentHitPoints());
 
-    fighter.setEquippedItem(axe);
-    hero.attackTo(fighter);
-    assertEquals(fighter.getCurrentHitPoints(),40);
+    axe.equipTo(fighter);
+    hero.combat(fighter);
+    assertEquals(40,fighter.getCurrentHitPoints());
+    assertEquals(35,hero.getCurrentHitPoints());
   }
 }

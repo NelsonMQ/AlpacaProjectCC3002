@@ -38,10 +38,10 @@ public class ClericTest extends AbstractTestUnit {
 
   @Override
   @Test
-  public void attackToTest() {
+  public void combatTest() {
     Sorcerer sorcerer = new Sorcerer(50,2,field.getCell(1, 0));
-    cleric.setEquippedItem(staff);
-    cleric.attackTo(sorcerer);
+    staff.equipTo(cleric);
+    cleric.combat(sorcerer);
     assertEquals(sorcerer.getCurrentHitPoints(),50);
   }
 }
