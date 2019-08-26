@@ -1,5 +1,6 @@
 package model.items;
 
+import model.units.Archer;
 import model.units.IUnit;
 
 /**

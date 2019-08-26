@@ -26,6 +26,10 @@ public abstract class AbstractAttackItem extends AbstractItem implements IAttack
         super(name, power, minRange, maxRange);
     }
 
+    /**
+     * Checks if the item can attack
+     * @return true if the item can attack
+     */
     public boolean canAttack() {
         return true;
     }

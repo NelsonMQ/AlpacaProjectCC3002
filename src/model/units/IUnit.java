@@ -50,13 +50,14 @@ public interface IUnit {
    * @param item
    *     the item to add
    */
-  void setItem(IEquipableItem item);
+  void addItem(IEquipableItem item);
 
   /**
+   * Removes a item from the list
    * @param item
    *    the item to remove
    */
-  public void removeItem(IEquipableItem item);
+  void removeItem(IEquipableItem item);
 
   /**
    * @return the current location of the unit
@@ -64,7 +65,10 @@ public interface IUnit {
   Location getLocation();
 
   /**
-   * Sets a new location for this unit,
+   * Sets a new location for this unit
+   *
+   * @param location
+   *     the location to be set
    */
   void setLocation(final Location location);
 

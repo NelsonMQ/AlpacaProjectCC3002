@@ -29,12 +29,12 @@ public class AlpacaTest extends AbstractTestUnit {
   @Test
   public void setItemTest(){
     assertEquals(getTestUnit().getItems().size(),0);
-    getTestUnit().setItem(axe);
+    getTestUnit().addItem(axe);
     assertTrue(getTestUnit().getItems().contains(axe));
-    getTestUnit().setItem(bow);
-    getTestUnit().setItem(sword);
+    getTestUnit().addItem(bow);
+    getTestUnit().addItem(sword);
     assertEquals(getTestUnit().getItems().size(),3);
-    getTestUnit().setItem(staff);
+    getTestUnit().addItem(staff);
     assertTrue(getTestUnit().getItems().contains(staff));
     assertEquals(getTestUnit().getItems().size(),4);
   }

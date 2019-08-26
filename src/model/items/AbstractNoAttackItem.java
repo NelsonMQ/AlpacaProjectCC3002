@@ -24,6 +24,10 @@ public abstract class AbstractNoAttackItem extends AbstractItem implements INoAt
         super(name, power, minRange, maxRange);
     }
 
+    /**
+     * Checks if the item can attack
+     * @return false is the item can't attack
+     */
     public boolean canAttack() {
         return false;
     }

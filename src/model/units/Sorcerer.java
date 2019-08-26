@@ -31,7 +31,7 @@ public class Sorcerer extends AbstractUnit {
         if (item instanceof Light ||
                 item instanceof Darkness ||
                 item instanceof Spirit) {
-            equippedItem = item;
+            setEquippedItem(item);
         }
     }
 }

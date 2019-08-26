@@ -6,10 +6,6 @@ import model.map.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -246,14 +242,14 @@ public abstract class AbstractTestUnit implements ITestUnit {
   @Test
   public void setItemTest() {
     assertEquals(getTestUnit().getItems().size(),0);
-    getTestUnit().setItem(axe);
+    getTestUnit().addItem(axe);
     assertTrue(getTestUnit().getItems().contains(axe));
 
-    getTestUnit().setItem(bow);
-    getTestUnit().setItem(sword);
+    getTestUnit().addItem(bow);
+    getTestUnit().addItem(sword);
     assertEquals(getTestUnit().getItems().size(),3);
 
-    getTestUnit().setItem(staff);
+    getTestUnit().addItem(staff);
     assertFalse(getTestUnit().getItems().contains(staff));
   }
 
@@ -263,8 +259,8 @@ public abstract class AbstractTestUnit implements ITestUnit {
     getTestUnit().removeItem(staff);
     assertEquals(getTestUnit().getItems().size(),0);
 
-    getTestUnit().setItem(axe);
-    getTestUnit().setItem(sword);
+    getTestUnit().addItem(axe);
+    getTestUnit().addItem(sword);
     getTestUnit().removeItem(axe);
     assertEquals(getTestUnit().getItems().size(),1);
     assertFalse(getTestUnit().getItems().contains(axe));
@@ -273,7 +269,7 @@ public abstract class AbstractTestUnit implements ITestUnit {
   @Override
   @Test
   public void giveItemToTest() {
-    getTestUnit().setItem(axe);
+    getTestUnit().addItem(axe);
     getTestUnit().giveItemTo(targetAlpaca,axe);
     assertEquals(targetAlpaca.getItems().size(),1);
     assertTrue(targetAlpaca.getItems().contains(axe));

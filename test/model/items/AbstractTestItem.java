@@ -1,12 +1,14 @@
 package model.items;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import model.map.Location;
+import model.units.Fighter;
 import model.units.IUnit;
+import model.units.Sorcerer;
+import model.units.SwordMaster;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Defines some common methods for all the items tests
@@ -116,4 +118,56 @@ public abstract class AbstractTestItem {
    * @return a unit that can equip the item being tested
    */
   public abstract IUnit getTestUnit();
+
+  /**
+   * Checks if canAttack works correctly
+   */
+  @Test
+  public void  canAttackTest() {
+    Axe axe = new Axe("Axe",10,1,2);
+    assertTrue(axe.canAttack());
+
+    Staff staff = new Staff("Staff", 10,1,2);
+    assertFalse(staff.canAttack());
+  }
+
+  /**
+   * Checks if normal, strong and weak attacks works correctly
+   */
+  @Test
+  public void attacksTest() {
+    Sword sword = new Sword("Sword", 10, 1, 2);
+    Sorcerer sorcerer = new Sorcerer(50,2,new Location(0, 0));
+    SwordMaster swordMaster = new SwordMaster(50,2,new Location(0, 1));
+    sword.equipTo(swordMaster);
+
+    sword.normalAttack(sorcerer);
+    sword.strongAttack(sorcerer);
+    sword.weakAttack(sorcerer);
+
+    assertEquals(25,sorcerer.getCurrentHitPoints());
+  }
+
+  /**
+   * Checks if attack(IUnit unit) method works correctly
+   */
+  @Test
+  public void attackTest() {
+    Axe axe = new Axe("Axe", 10, 1, 2);
+    Sword sword = new Sword("Sword", 10, 1, 2);
+    Spear spear = new Spear("Spear", 10, 1, 2);
+    Bow bow = new Bow("Bow", 10, 2, 3);
+    Light light = new Light("Light", 10, 1, 2);
+    Darkness darkness = new Darkness("Darkness", 10, 1, 2);
+    Spirit spirit = new Spirit("Spirit", 10, 1, 2);
+
+    axe.attack(getTestUnit());
+    sword.attack(getTestUnit());
+    spear.attack(getTestUnit());
+    bow.attack(getTestUnit());
+    light.attack(getTestUnit());
+    darkness.attack(getTestUnit());
+    spirit.attack(getTestUnit());
+    assertEquals(-20,getTestUnit().getCurrentHitPoints());
+  }
 }
