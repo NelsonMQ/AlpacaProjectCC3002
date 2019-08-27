@@ -1,6 +1,6 @@
 package model.items;
 
-import model.units.IUnit;
+import model.units.*;
 
 /**
  * This class represents an Axe.
@@ -45,7 +45,9 @@ public class Axe extends AbstractAttackItem {
     normalAttack(this.getOwner());
   }
 
-  public void receiveSpearDamage(Spear spear) { weakAttack(this.getOwner()); }
+  public void receiveSpearDamage(Spear spear) {
+    weakAttack(this.getOwner());
+  }
 
   public void receiveSwordDamage(Sword sword) {
     strongAttack(this.getOwner());
@@ -62,4 +64,18 @@ public class Axe extends AbstractAttackItem {
   public void receiveSpiritDamage(Spirit spirit) {
     strongAttack(this.getOwner());
   }
+
+  public void equipToFighter(Fighter fighter) {
+    this.equipTo(fighter);
+  }
+
+  public void equipToArcher(Archer archer){}
+
+  public void equipToSorcerer(Sorcerer sorcerer){}
+
+  public void equipToHero(Hero hero){}
+
+  public void equipToCleric(Cleric cleric){}
+
+  public void equipToSwordMaster(SwordMaster swordMaster){}
 }

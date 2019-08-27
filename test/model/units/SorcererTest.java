@@ -69,11 +69,11 @@ public class SorcererTest extends AbstractTestUnit {
     @Test
     public void combatTest() {
         Archer archer = new Archer(30,2,field.getCell(2, 0));
-        darkness.equipTo(sorcerer);
+        sorcerer.equipItem(darkness);
         sorcerer.combat(archer);
         assertEquals(20,archer.getCurrentHitPoints());
 
-        bow.equipTo(archer);
+        archer.equipItem(bow);
         sorcerer.combat(archer);
         assertEquals(5,archer.getCurrentHitPoints());
         assertEquals(35,sorcerer.getCurrentHitPoints());

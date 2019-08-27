@@ -1,6 +1,6 @@
 package model.items;
 
-import model.units.IUnit;
+import model.units.*;
 
 /**
  * This class represents a <i>spear</i>.
@@ -64,4 +64,18 @@ public class Spear extends AbstractAttackItem {
   public void receiveSpiritDamage(Spirit spirit) {
     strongAttack(this.getOwner());
   }
+
+  public void equipToHero(Hero hero) {
+    this.equipTo(hero);
+  }
+
+  public void equipToArcher(Archer archer){}
+
+  public void equipToSorcerer(Sorcerer sorcerer){}
+
+  public void equipToFighter(Fighter fighter){}
+
+  public void equipToCleric(Cleric cleric){}
+
+  public void equipToSwordMaster(SwordMaster swordMaster){}
 }

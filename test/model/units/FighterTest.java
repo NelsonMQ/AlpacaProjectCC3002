@@ -43,11 +43,11 @@ public class FighterTest extends AbstractTestUnit {
   @Test
   public void combatTest() {
     SwordMaster swordMaster = new SwordMaster(20,2,field.getCell(1, 0));
-    axe.equipTo(fighter);
+    fighter.equipItem(axe);
     fighter.combat(swordMaster);
     assertEquals(10,swordMaster.getCurrentHitPoints());
 
-    sword.equipTo(swordMaster);
+    swordMaster.equipItem(sword);
     fighter.combat(swordMaster);
     assertEquals(10,swordMaster.getCurrentHitPoints());
     assertEquals(35,fighter.getCurrentHitPoints());

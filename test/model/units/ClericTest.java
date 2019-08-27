@@ -40,7 +40,7 @@ public class ClericTest extends AbstractTestUnit {
   @Test
   public void combatTest() {
     Sorcerer sorcerer = new Sorcerer(50,2,field.getCell(1, 0));
-    staff.equipTo(cleric);
+    cleric.equipItem(staff);
     cleric.combat(sorcerer);
     assertEquals(sorcerer.getCurrentHitPoints(),50);
   }

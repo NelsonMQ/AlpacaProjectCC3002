@@ -1,5 +1,7 @@
 package model.items;
 
+import model.units.*;
+import model.units.Archer;
 import model.units.IUnit;
 
 /**
@@ -48,6 +50,7 @@ public interface IEquipableItem {
   
   /**
    * the unit that has an equipable item receive an attack from sword
+   *
    * @param sword
    *      the item whose is attacking
    */
@@ -55,6 +58,7 @@ public interface IEquipableItem {
 
   /**
    *the unit that has an equipable item receive an attack from axe
+   *
    * @param axe
    *      the item whose is attacking
    */
@@ -62,6 +66,7 @@ public interface IEquipableItem {
 
   /**
    *the unit that has an equipable item receive an attack from bow
+   *
    * @param bow
    *      the item whose is attacking
    */
@@ -69,6 +74,7 @@ public interface IEquipableItem {
 
   /**
    *the unit that has an equipable item receive an attack from darkness
+   *
    * @param darkness
    *      the item whose is attacking
    */
@@ -76,6 +82,7 @@ public interface IEquipableItem {
 
   /**
    *the unit that has an equipable item receive an attack from light
+   *
    * @param light
    *      the item whose is attacking
    */
@@ -83,6 +90,7 @@ public interface IEquipableItem {
 
   /**
    *the unit that has an equipable item receive an attack from spear
+   *
    * @param spear
    *      the item whose is attacking
    */
@@ -90,10 +98,72 @@ public interface IEquipableItem {
 
   /**
    *the unit that has an equipable item receive an attack from spirit
+   *
    * @param spirit
    *      the item whose is attacking
    */
   void receiveSpiritDamage(Spirit spirit);
 
+  /**
+   * Checks if the item can attack
+   *
+   * @return true if the item can attack
+   */
   boolean canAttack();
+
+  /**
+   * Set the owner of a item
+   *
+   * @param unit
+   *    the owner of the item
+   */
+  void setOwner(IUnit unit);
+
+  /**
+   * equips the item if the unit can equip the item.
+   *
+   * @param archer
+   *    the unit to equip the item
+   */
+  void equipToArcher(Archer archer);
+
+  /**
+   * equips the item if the unit can equip the item.
+   *
+   * @param sorcerer
+   *    the unit to equip the item
+   */
+  void equipToSorcerer(Sorcerer sorcerer);
+
+  /**
+   * equips the item if the unit can equip the item.
+   *
+   * @param hero
+   *    the unit to equip the item
+   */
+  void equipToHero(Hero hero);
+
+  /**
+   * equips the item if the unit can equip the item.
+   *
+   * @param cleric
+   *    the unit to equip the item
+   */
+  void equipToCleric(Cleric cleric);
+
+  /**
+   * equips the item if the unit can equip the item.
+   *
+   * @param fighter
+   *    the unit to equip the item
+   */
+  void equipToFighter(Fighter fighter);
+
+  /**
+   * equips the item if the unit can equip the item.
+   *
+   * @param swordMaster
+   *    the unit to equip the item
+   */
+  void equipToSwordMaster(SwordMaster swordMaster);
 }

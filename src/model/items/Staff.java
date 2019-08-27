@@ -1,5 +1,7 @@
 package model.items;
 
+import model.units.*;
+
 /**
  * This class represents a <i>Staff</i> type item.
  * <p>
@@ -51,4 +53,18 @@ public class Staff extends AbstractNoAttackItem {
   public void receiveSpiritDamage(Spirit spirit) {
     spirit.strongAttack(this.getOwner());
   }
+
+  public void equipToCleric(Cleric cleric) {
+    this.equipTo(cleric);
+  }
+
+  public void equipToArcher(Archer archer){}
+
+  public void equipToSorcerer(Sorcerer sorcerer){}
+
+  public void equipToHero(Hero hero){}
+
+  public void equipToFighter(Fighter fighter){}
+
+  public void equipToSwordMaster(SwordMaster swordMaster){}
 }

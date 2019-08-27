@@ -1,7 +1,6 @@
 package model.items;
 
-import model.units.Archer;
-import model.units.IUnit;
+import model.units.*;
 
 /**
  * @author Ignacio Slater Muñoz
@@ -67,4 +66,17 @@ public class Bow extends AbstractAttackItem {
     strongAttack(this.getOwner());
   }
 
+  public void equipToArcher(Archer archer) {
+    this.equipTo(archer);
+  }
+
+  public void equipToFighter(Fighter fighter){}
+
+  public void equipToSorcerer(Sorcerer sorcerer){}
+
+  public void equipToHero(Hero hero){}
+
+  public void equipToCleric(Cleric cleric){}
+
+  public void equipToSwordMaster(SwordMaster swordMaster){}
 }

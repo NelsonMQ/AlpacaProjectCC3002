@@ -1,6 +1,6 @@
 package model.items;
 
-import model.units.IUnit;
+import model.units.*;
 
 /**
  * This class represents a sword type item.
@@ -64,4 +64,18 @@ public class Sword extends AbstractAttackItem {
   public void receiveSpiritDamage(Spirit spirit) {
     strongAttack(this.getOwner());
   }
+
+  public void equipToSwordMaster(SwordMaster swordMaster) {
+    this.equipTo(swordMaster);
+  }
+
+  public void equipToArcher(Archer archer){}
+
+  public void equipToSorcerer(Sorcerer sorcerer){}
+
+  public void equipToHero(Hero hero){}
+
+  public void equipToCleric(Cleric cleric){}
+
+  public void equipToFighter(Fighter fighter){}
 }

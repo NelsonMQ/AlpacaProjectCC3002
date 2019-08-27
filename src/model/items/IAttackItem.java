@@ -26,7 +26,7 @@ public interface IAttackItem {
     void normalAttack(IUnit unit);
 
     /**
-     * This attack has a strong damage (1.5*damage)
+     * This attack has a strong damage (1.5*damage is approximate to int)
      * @param unit
      *     the unit to attack
      */

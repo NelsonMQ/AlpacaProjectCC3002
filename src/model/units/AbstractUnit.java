@@ -74,6 +74,7 @@ public abstract class AbstractUnit implements IUnit {
   public void addItem(IEquipableItem item){
     if(this.items.size()<this.getMaxItems()){
       this.items.add(item);
+      item.setOwner(this);
     }
   }
 

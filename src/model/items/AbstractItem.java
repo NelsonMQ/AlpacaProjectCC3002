@@ -1,5 +1,6 @@
 package model.items;
 
+import model.units.Fighter;
 import model.units.IUnit;
 
 /**
@@ -37,8 +38,13 @@ public abstract class AbstractItem implements IEquipableItem {
 
   @Override
   public void equipTo(final IUnit unit) {
-    unit.equipItem(this);
+    unit.setEquippedItem(this);
     owner = unit;
+  }
+
+  @Override
+  public void setOwner(IUnit unit) {
+    this.owner = unit;
   }
 
   @Override
@@ -68,4 +74,6 @@ public abstract class AbstractItem implements IEquipableItem {
 
   @Override
   public abstract boolean canAttack();
+
+
 }

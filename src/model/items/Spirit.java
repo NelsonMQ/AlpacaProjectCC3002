@@ -1,6 +1,6 @@
 package model.items;
 
-import model.units.IUnit;
+import model.units.*;
 
 /**
  * This class represents a <i>spirit</i>.
@@ -65,4 +65,18 @@ public class Spirit extends AbstractAttackItem {
     public void receiveSpiritDamage(Spirit spirit) {
         normalAttack(this.getOwner());
     }
+
+    public void equipToSorcerer(Sorcerer sorcerer) {
+        this.equipTo(sorcerer);
+    }
+
+    public void equipToArcher(Archer archer){}
+
+    public void equipToFighter(Fighter fighter){}
+
+    public void equipToHero(Hero hero){}
+
+    public void equipToCleric(Cleric cleric){}
+
+    public void equipToSwordMaster(SwordMaster swordMaster){}
 }

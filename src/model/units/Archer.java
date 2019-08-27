@@ -41,10 +41,6 @@ public class Archer extends AbstractUnit {
    */
   @Override
   public void equipItem(final IEquipableItem item) {
-    if (item instanceof Bow) {
-      setEquippedItem(item);
-    }
+    item.equipToArcher(this);
   }
-
-
 }

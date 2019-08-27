@@ -28,10 +28,6 @@ public class Sorcerer extends AbstractUnit {
      */
     @Override
     public void equipItem(final IEquipableItem item) {
-        if (item instanceof Light ||
-                item instanceof Darkness ||
-                item instanceof Spirit) {
-            setEquippedItem(item);
-        }
+        item.equipToSorcerer(this);
     }
 }
