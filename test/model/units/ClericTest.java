@@ -32,6 +32,7 @@ public class ClericTest extends AbstractTestUnit {
   @Override
   public void equipStaffTest() {
     assertNull(cleric.getEquippedItem());
+    cleric.addItem(staff);
     cleric.equipItem(staff);
     assertEquals(staff, cleric.getEquippedItem());
   }
@@ -40,6 +41,7 @@ public class ClericTest extends AbstractTestUnit {
   @Test
   public void combatTest() {
     Sorcerer sorcerer = new Sorcerer(50,2,field.getCell(1, 0));
+    cleric.addItem(staff);
     cleric.equipItem(staff);
     cleric.combat(sorcerer);
     assertEquals(sorcerer.getCurrentHitPoints(),50);

@@ -39,6 +39,7 @@ public class SorcererTest extends AbstractTestUnit {
     @Override
     public void equipLightTest() {
         assertNull(sorcerer.getEquippedItem());
+        sorcerer.addItem(light);
         sorcerer.equipItem(light);
         assertEquals(light, sorcerer.getEquippedItem());
     }
@@ -50,6 +51,7 @@ public class SorcererTest extends AbstractTestUnit {
     @Override
     public void equipDarknessTest() {
         assertNull(sorcerer.getEquippedItem());
+        sorcerer.addItem(darkness);
         sorcerer.equipItem(darkness);
         assertEquals(darkness, sorcerer.getEquippedItem());
     }
@@ -61,6 +63,7 @@ public class SorcererTest extends AbstractTestUnit {
     @Override
     public void equipSpiritTest() {
         assertNull(sorcerer.getEquippedItem());
+        sorcerer.addItem(spirit);
         sorcerer.equipItem(spirit);
         assertEquals(spirit, sorcerer.getEquippedItem());
     }
@@ -69,10 +72,12 @@ public class SorcererTest extends AbstractTestUnit {
     @Test
     public void combatTest() {
         Archer archer = new Archer(30,2,field.getCell(2, 0));
+        sorcerer.addItem(darkness);
         sorcerer.equipItem(darkness);
         sorcerer.combat(archer);
         assertEquals(20,archer.getCurrentHitPoints());
 
+        archer.addItem(bow);
         archer.equipItem(bow);
         sorcerer.combat(archer);
         assertEquals(5,archer.getCurrentHitPoints());

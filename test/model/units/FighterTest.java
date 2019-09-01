@@ -35,6 +35,7 @@ public class FighterTest extends AbstractTestUnit {
   @Override
   public void equipAxeTest() {
     assertNull(fighter.getEquippedItem());
+    fighter.addItem(axe);
     fighter.equipItem(axe);
     assertEquals(axe, fighter.getEquippedItem());
   }
@@ -43,10 +44,12 @@ public class FighterTest extends AbstractTestUnit {
   @Test
   public void combatTest() {
     SwordMaster swordMaster = new SwordMaster(20,2,field.getCell(1, 0));
+    fighter.addItem(axe);
     fighter.equipItem(axe);
     fighter.combat(swordMaster);
     assertEquals(10,swordMaster.getCurrentHitPoints());
 
+    swordMaster.addItem(sword);
     swordMaster.equipItem(sword);
     fighter.combat(swordMaster);
     assertEquals(10,swordMaster.getCurrentHitPoints());

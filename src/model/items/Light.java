@@ -38,45 +38,43 @@ public class Light extends AbstractAttackItem {
         }
     }
 
+    @Override
     public void receiveAxeDamage(Axe axe) {
         strongAttack(this.getOwner());
     }
 
+    @Override
     public void receiveBowDamage(Bow bow) {
         strongAttack(this.getOwner());
     }
 
+    @Override
     public void receiveSpearDamage(Spear spear) {
         strongAttack(this.getOwner());
     }
 
+    @Override
     public void receiveSwordDamage(Sword sword) {
         strongAttack(this.getOwner());
     }
 
+    @Override
     public void receiveLightDamage(Light light) {
         normalAttack(this.getOwner());
     }
 
+    @Override
     public void receiveDarknessDamage(Darkness darkness) {
         weakAttack(this.getOwner());
     }
 
+    @Override
     public void receiveSpiritDamage(Spirit spirit) {
         strongAttack(this.getOwner());
     }
 
+    @Override
     public void equipToSorcerer(Sorcerer sorcerer) {
         this.equipTo(sorcerer);
     }
-
-    public void equipToArcher(Archer archer){}
-
-    public void equipToFighter(Fighter fighter){}
-
-    public void equipToHero(Hero hero){}
-
-    public void equipToCleric(Cleric cleric){}
-
-    public void equipToSwordMaster(SwordMaster swordMaster){}
 }

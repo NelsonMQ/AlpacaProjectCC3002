@@ -65,17 +65,8 @@ public class Sword extends AbstractAttackItem {
     strongAttack(this.getOwner());
   }
 
+  @Override
   public void equipToSwordMaster(SwordMaster swordMaster) {
     this.equipTo(swordMaster);
   }
-
-  public void equipToArcher(Archer archer){}
-
-  public void equipToSorcerer(Sorcerer sorcerer){}
-
-  public void equipToHero(Hero hero){}
-
-  public void equipToCleric(Cleric cleric){}
-
-  public void equipToFighter(Fighter fighter){}
 }

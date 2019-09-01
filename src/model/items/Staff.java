@@ -28,43 +28,42 @@ public class Staff extends AbstractNoAttackItem {
     super(name, power, minRange, maxRange);
   }
 
+  @Override
   public void receiveAxeDamage(Axe axe) {
     axe.normalAttack(this.getOwner());
   }
 
+  @Override
   public void receiveBowDamage(Bow bow) {
     bow.normalAttack(this.getOwner());
   }
 
+  @Override
   public void receiveSpearDamage(Spear spear) { spear.normalAttack(this.getOwner()); }
 
+  @Override
   public void receiveSwordDamage(Sword sword) {
     sword.normalAttack(this.getOwner());
   }
 
+  @Override
   public void receiveLightDamage(Light light) {
     light.strongAttack(this.getOwner());
   }
 
+  @Override
   public void receiveDarknessDamage(Darkness darkness) {
     darkness.strongAttack(this.getOwner());
   }
 
+  @Override
   public void receiveSpiritDamage(Spirit spirit) {
     spirit.strongAttack(this.getOwner());
   }
 
+  @Override
   public void equipToCleric(Cleric cleric) {
     this.equipTo(cleric);
   }
-
-  public void equipToArcher(Archer archer){}
-
-  public void equipToSorcerer(Sorcerer sorcerer){}
-
-  public void equipToHero(Hero hero){}
-
-  public void equipToFighter(Fighter fighter){}
-
-  public void equipToSwordMaster(SwordMaster swordMaster){}
 }
+

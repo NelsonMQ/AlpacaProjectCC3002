@@ -37,45 +37,43 @@ public class Axe extends AbstractAttackItem {
     }
   }
 
+  @Override
   public void receiveAxeDamage(Axe axe) {
     normalAttack(this.getOwner());
   }
 
+  @Override
   public void receiveBowDamage(Bow bow) {
     normalAttack(this.getOwner());
   }
 
+  @Override
   public void receiveSpearDamage(Spear spear) {
     weakAttack(this.getOwner());
   }
 
+  @Override
   public void receiveSwordDamage(Sword sword) {
     strongAttack(this.getOwner());
   }
 
+  @Override
   public void receiveLightDamage(Light light) {
     strongAttack(this.getOwner());
   }
 
+  @Override
   public void receiveDarknessDamage(Darkness darkness) {
     strongAttack(this.getOwner());
   }
 
+  @Override
   public void receiveSpiritDamage(Spirit spirit) {
     strongAttack(this.getOwner());
   }
 
+  @Override
   public void equipToFighter(Fighter fighter) {
     this.equipTo(fighter);
   }
-
-  public void equipToArcher(Archer archer){}
-
-  public void equipToSorcerer(Sorcerer sorcerer){}
-
-  public void equipToHero(Hero hero){}
-
-  public void equipToCleric(Cleric cleric){}
-
-  public void equipToSwordMaster(SwordMaster swordMaster){}
 }

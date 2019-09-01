@@ -1,6 +1,7 @@
 package model.items;
 
 import model.map.Location;
+import model.units.Archer;
 import model.units.Cleric;
 import model.units.IUnit;
 import org.junit.jupiter.api.Test;

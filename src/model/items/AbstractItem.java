@@ -1,7 +1,6 @@
 package model.items;
 
-import model.units.Fighter;
-import model.units.IUnit;
+import model.units.*;
 
 /**
  * Abstract class that defines some common information and behaviour between all items.
@@ -75,5 +74,23 @@ public abstract class AbstractItem implements IEquipableItem {
   @Override
   public abstract boolean canAttack();
 
+  @Override
+  public void equipToFighter(Fighter fighter) {
+  }
+
+  @Override
+  public void equipToArcher(Archer archer){}
+
+  @Override
+  public void equipToSorcerer(Sorcerer sorcerer){}
+
+  @Override
+  public void equipToHero(Hero hero){}
+
+  @Override
+  public void equipToCleric(Cleric cleric){}
+
+  @Override
+  public void equipToSwordMaster(SwordMaster swordMaster){}
 
 }
