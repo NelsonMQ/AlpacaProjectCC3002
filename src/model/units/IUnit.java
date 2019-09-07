@@ -29,6 +29,13 @@ public interface IUnit {
   int getCurrentHitPoints();
 
   /**
+   * Return the maxHP of the unit
+   *
+   * @return the maxHP of the unit
+   */
+  int getMaxHP();
+
+  /**
    * @return the items carried by this unit
    */
   List<IEquipableItem> getItems();

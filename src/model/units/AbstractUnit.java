@@ -28,6 +28,7 @@ public abstract class AbstractUnit implements IUnit {
   private IEquipableItem equippedItem;
   private Location location;
   private int maxItems;
+  private int maxHP;
 
   /**
    * Creates a new Unit.
@@ -48,11 +49,17 @@ public abstract class AbstractUnit implements IUnit {
     this.location = location;
     this.items.addAll(Arrays.asList(items).subList(0, min(maxItems, items.length)));
     this.maxItems = maxItems;
+    this.maxHP = hitPoints;
   }
 
   @Override
   public int getCurrentHitPoints() {
     return currentHitPoints;
+  }
+
+  @Override
+  public int getMaxHP() {
+    return maxHP;
   }
 
   @Override

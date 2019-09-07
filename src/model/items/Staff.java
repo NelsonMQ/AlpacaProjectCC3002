@@ -65,5 +65,21 @@ public class Staff extends AbstractNoAttackItem {
   public void equipToCleric(Cleric cleric) {
     this.equipTo(cleric);
   }
+
+  /**
+   * Heals the unit
+   *
+   * @param unit the unit to be heal
+   */
+  public void heal(IUnit unit) {
+    int dif = unit.getMaxHP() - unit.getCurrentHitPoints();
+    if(dif>0 && unit.getCurrentHitPoints()>0){
+      if(unit.getCurrentHitPoints()+this.getPower()>unit.getMaxHP()){
+        unit.setCurrentHitPoints(unit.getCurrentHitPoints()+ dif);
+      }
+      else
+        unit.setCurrentHitPoints(unit.getCurrentHitPoints()+this.getPower());
+    }
+  }
 }
 

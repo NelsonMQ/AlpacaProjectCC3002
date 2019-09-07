@@ -46,4 +46,26 @@ public class ClericTest extends AbstractTestUnit {
     cleric.combat(sorcerer);
     assertEquals(sorcerer.getCurrentHitPoints(),50);
   }
+
+  @Test
+  public void healToTest() {
+    Sorcerer sorcerer = new Sorcerer(50,2,field.getCell(1, 0));
+    cleric.addItem(staff);
+    sorcerer.setCurrentHitPoints(0);
+    cleric.healTo(sorcerer);
+    assertEquals(0,sorcerer.getCurrentHitPoints());
+
+    sorcerer.setCurrentHitPoints(20);
+    cleric.healTo(sorcerer);
+    assertEquals(20,sorcerer.getCurrentHitPoints());
+
+    cleric.equipItem(staff);
+    cleric.healTo(sorcerer);
+    assertEquals(30,sorcerer.getCurrentHitPoints());
+
+    sorcerer.setCurrentHitPoints(45);
+    cleric.healTo(sorcerer);
+    assertEquals(50,sorcerer.getCurrentHitPoints());
+
+  }
 }

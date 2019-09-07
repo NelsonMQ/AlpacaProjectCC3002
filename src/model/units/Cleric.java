@@ -39,5 +39,16 @@ public class Cleric extends AbstractUnit {
     }
   }
 
+  /**
+   * Heals the unit
+   *
+   * @param unit the unit to heal
+   */
+  public void healTo(IUnit unit) {
+    if(getEquippedItem()!=null){
+      ((Staff)getEquippedItem()).heal(unit);
+    }
+  }
+
 
 }
