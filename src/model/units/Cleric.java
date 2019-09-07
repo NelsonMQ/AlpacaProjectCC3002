@@ -45,7 +45,9 @@ public class Cleric extends AbstractUnit {
    * @param unit the unit to heal
    */
   public void healTo(IUnit unit) {
-    if(getEquippedItem()!=null){
+    double distance = getLocation().distanceTo(unit.getLocation());
+    if(getEquippedItem()!=null && distance<=getEquippedItem().getMaxRange() &&
+            distance>=getEquippedItem().getMinRange()){
       ((Staff)getEquippedItem()).heal(unit);
     }
   }
