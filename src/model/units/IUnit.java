@@ -127,7 +127,7 @@ public interface IUnit {
   void attackTo(IUnit unit);
 
   /**
-   *The units will fight
+   * The units will fight
    * @param unit
    *    the unit to fight
    */
@@ -137,4 +137,16 @@ public interface IUnit {
    * Sets the current hit points of the unit
    */
   void setCurrentHitPoints(int hitPoints);
+
+  /**
+   * Use the item in a unit, it can attack or heal
+   * @param unit the unit to use the item
+   */
+  void useItem(IUnit unit);
+
+  /**
+   * Use the item in a unit
+   * @param unit the unit to use the item
+   */
+  void useItemOn(IUnit unit);
 }

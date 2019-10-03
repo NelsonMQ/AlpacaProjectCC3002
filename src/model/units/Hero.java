@@ -39,4 +39,9 @@ public class Hero extends AbstractUnit {
       item.equipToHero(this);
     }
   }
+
+  @Override
+  public void useItem(IUnit unit) {
+    this.combat(unit);
+  }
 }

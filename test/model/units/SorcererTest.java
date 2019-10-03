@@ -74,16 +74,16 @@ public class SorcererTest extends AbstractTestUnit {
         Archer archer = new Archer(30,2,field.getCell(2, 0));
         sorcerer.addItem(darkness);
         sorcerer.equipItem(darkness);
-        sorcerer.combat(archer);
+        sorcerer.useItemOn(archer);
         assertEquals(20,archer.getCurrentHitPoints());
 
         archer.addItem(bow);
         archer.equipItem(bow);
-        sorcerer.combat(archer);
+        sorcerer.useItemOn(archer);
         assertEquals(5,archer.getCurrentHitPoints());
         assertEquals(35,sorcerer.getCurrentHitPoints());
 
-        sorcerer.combat(archer);
+        sorcerer.useItemOn(archer);
         assertEquals(35,sorcerer.getCurrentHitPoints());
         assertEquals(-10,archer.getCurrentHitPoints());
 

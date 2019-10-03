@@ -52,5 +52,8 @@ public class Cleric extends AbstractUnit {
     }
   }
 
+  public void useItem(IUnit unit) {
+    healTo(unit);
+  }
 
 }

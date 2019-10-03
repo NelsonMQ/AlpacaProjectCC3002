@@ -25,8 +25,8 @@ public class Bow extends AbstractAttackItem {
    */
   public Bow(final String name, final int power, final int minRange, final int maxRange) {
     super(name, power, minRange, maxRange);
-    this.minRange = Math.max(minRange, 2);
-    this.maxRange = Math.max(maxRange, this.minRange);
+    setMinRange(Math.max(minRange, 2));
+    setMaxRange(Math.max(maxRange, getMinRange()));
   }
 
   public void attack(IUnit unit) {

@@ -32,4 +32,9 @@ public class Sorcerer extends AbstractUnit {
             item.equipToSorcerer(this);
         }
     }
+
+    @Override
+    public void useItem(IUnit unit) {
+        this.combat(unit);
+    }
 }

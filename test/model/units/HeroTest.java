@@ -43,12 +43,12 @@ public class HeroTest extends AbstractTestUnit {
     Fighter fighter = new Fighter(50,2,field.getCell(1, 0));
     hero.addItem(spear);
     hero.equipItem(spear);
-    hero.combat(fighter);
+    hero.useItemOn(fighter);
     assertEquals(40,fighter.getCurrentHitPoints());
 
     fighter.addItem(axe);
     fighter.equipItem(axe);
-    hero.combat(fighter);
+    hero.useItemOn(fighter);
     assertEquals(40,fighter.getCurrentHitPoints());
     assertEquals(35,hero.getCurrentHitPoints());
   }

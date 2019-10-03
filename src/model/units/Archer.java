@@ -45,4 +45,9 @@ public class Archer extends AbstractUnit {
       item.equipToArcher(this);
     }
   }
+
+  @Override
+  public void useItem(IUnit unit) {
+    this.combat(unit);
+  }
 }

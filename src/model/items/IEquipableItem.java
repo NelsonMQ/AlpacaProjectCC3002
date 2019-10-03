@@ -47,6 +47,16 @@ public interface IEquipableItem {
    * @return the maximum range of the item
    */
   int getMaxRange();
+
+  /**
+   * Set the maximum range of the item
+   */
+  void setMaxRange(int range);
+
+  /**
+   * Set the minimum range of the item
+   */
+  void setMinRange(int range);
   
   /**
    * the unit that has an equipable item receive an attack from sword

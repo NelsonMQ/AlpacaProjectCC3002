@@ -30,4 +30,9 @@ public class Fighter extends AbstractUnit {
       item.equipToFighter(this);
     }
   }
+
+  @Override
+  public void useItem(IUnit unit) {
+    this.combat(unit);
+  }
 }

@@ -46,12 +46,12 @@ public class FighterTest extends AbstractTestUnit {
     SwordMaster swordMaster = new SwordMaster(20,2,field.getCell(1, 0));
     fighter.addItem(axe);
     fighter.equipItem(axe);
-    fighter.combat(swordMaster);
+    fighter.useItemOn(swordMaster);
     assertEquals(10,swordMaster.getCurrentHitPoints());
 
     swordMaster.addItem(sword);
     swordMaster.equipItem(sword);
-    fighter.combat(swordMaster);
+    fighter.useItemOn(swordMaster);
     assertEquals(10,swordMaster.getCurrentHitPoints());
     assertEquals(35,fighter.getCurrentHitPoints());
 

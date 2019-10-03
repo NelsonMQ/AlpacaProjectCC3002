@@ -22,7 +22,7 @@ import model.map.Location;
  */
 public abstract class AbstractUnit implements IUnit {
 
-  protected final List<IEquipableItem> items = new ArrayList<>();
+  private final List<IEquipableItem> items = new ArrayList<>();
   private int currentHitPoints;
   private final int movement;
   private IEquipableItem equippedItem;
@@ -152,6 +152,14 @@ public abstract class AbstractUnit implements IUnit {
       unit.attackTo(this);
     }
   }
+
+  @Override
+  public void useItemOn(IUnit unit) {
+    this.useItem(unit);
+  }
+
+  @Override
+  public abstract void useItem(IUnit unit);
 
   @Override
   public void setCurrentHitPoints(int hitPoints) {

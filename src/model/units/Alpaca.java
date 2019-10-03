@@ -39,4 +39,9 @@ public class Alpaca extends AbstractUnit {
     // Method body intentionally left empty
   }
 
+  @Override
+  public void useItem(IUnit unit) {
+    // Method body intentionally left empty
+  }
+
 }

@@ -12,8 +12,8 @@ public abstract class AbstractItem implements IEquipableItem {
 
   private final String name;
   private final int power;
-  protected int maxRange;
-  protected int minRange;
+  private int maxRange;
+  private int minRange;
   private IUnit owner;
 
   /**
@@ -69,6 +69,16 @@ public abstract class AbstractItem implements IEquipableItem {
   @Override
   public int getMaxRange() {
     return maxRange;
+  }
+
+  @Override
+  public void setMinRange(int range){
+    minRange = range;
+  }
+
+  @Override
+  public void setMaxRange(int range){
+    maxRange = range;
   }
 
   @Override

@@ -31,4 +31,9 @@ public class SwordMaster extends AbstractUnit {
       item.equipToSwordMaster(this);
     }
   }
+
+  @Override
+  public void useItem(IUnit unit) {
+    this.combat(unit);
+  }
 }
