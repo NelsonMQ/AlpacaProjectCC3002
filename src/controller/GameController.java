@@ -87,7 +87,15 @@ public class GameController {
    *     the player to be removed
    */
   public void removeTactician(String tactician) {
-
+    for(int i = 0; i<tacticians.size();i++){
+      if(tacticians.get(i).getName()==tactician) {
+        List<IUnit> units = tacticians.get(i).getUnits();
+        for(int j = 0; j<units.size();j++){
+          units.get(j).getLocation().setUnit(null);
+        }
+        tacticians.remove(i);
+      }
+    }
   }
 
   /**
@@ -103,7 +111,7 @@ public class GameController {
    * Starts a game without a limit of turns.
    */
   public void initEndlessGame() {
-
+    initGame(-1);
   }
 
   /**
@@ -205,15 +213,20 @@ public class GameController {
     return matrix;
   }
 
-  public Field matrixToMap(int[][] matrix) {
+  public int locationQuantity(int[][] matrix){
     int n = 0;
     for(int i=0;i<matrix[0].length;i++){
       for(int j=0;j<matrix[0].length;j++){
         if(matrix[i][j]==1){
-            n+=1;
+          n+=1;
         }
       }
     }
+    return n;
+  }
+
+  public Field matrixToMap(int[][] matrix) {
+    int n = locationQuantity(matrix);
     Location[] locs = new Location[n];
     int k = 0;
     for(int i=0;i<matrix[0].length;i++){

@@ -31,7 +31,7 @@ class GameControllerTest {
     controller = new GameController(4, 7);
     testTacticians = List.of("Player 0", "Player 1", "Player 2", "Player 3");
   }
-
+  /*
   @Test
   void getTacticians() {
     List<Tactician> tacticians = controller.getTacticians();
@@ -40,7 +40,7 @@ class GameControllerTest {
       assertEquals("Player " + i, tacticians.get(i).getName());
     }
   }
-
+  */
   @Test
   void getGameMap() {
     Field gameMap = controller.getGameMap();
@@ -57,7 +57,7 @@ class GameControllerTest {
     //    usar el método setSeed de Random.
     //  ESTO ÚLTIMO NO ESTÁ IMPLEMENTADO EN EL MAPA, ASÍ QUE DEBEN AGREGARLO (!)
   }
-
+  /*
   @Test
   void getTurnOwner() {
     //  En este caso deben hacer lo mismo que para el mapa
@@ -171,5 +171,5 @@ class GameControllerTest {
   @Test
   void giveItemTo() {
   }
-
+  */
 }
