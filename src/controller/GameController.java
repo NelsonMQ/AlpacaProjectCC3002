@@ -3,8 +3,12 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Collections;
 
 import model.Tactician;
+import model.factory.GameMapFactory.FieldFactory;
+import model.factory.IEquipableItemFactory.IEquipableItemFactory;
+import model.factory.IUnitFactory.IUnitFactory;
 import model.items.IEquipableItem;
 import model.map.Field;
 import model.map.Location;
@@ -25,6 +29,13 @@ public class GameController {
   private Tactician actualPlayer;
   private int roundNumber;
   private int maxRounds;
+  private IEquipableItemFactory itemFactory;
+  private IUnitFactory unitFactory;
+  private List<Tactician> roundOrder;
+  private List<Tactician> nextRoundOrder;
+  private Random randomSeed;
+  private List<String> winners;
+  private int tacticiansNum;
 
   /**
    * Creates the controller for a new game.
@@ -35,7 +46,17 @@ public class GameController {
    *     the dimensions of the map, for simplicity, all maps are squares
    */
   public GameController(int numberOfPlayers, int mapSize) {
-    this.map=newMap(mapSize);
+    tacticiansNum = numberOfPlayers;
+    FieldFactory fieldFactory = new FieldFactory();
+    this.map=fieldFactory.create(mapSize);
+    tacticians = createPlayers(numberOfPlayers);
+    nextRoundOrder = new ArrayList<>();
+    nextRoundOrder.addAll(tacticians);
+    randomSeed = new Random(10);
+    Collections.shuffle(nextRoundOrder, randomSeed);
+    roundOrder = new ArrayList<>();
+    prepareRoundOrder();
+    this.actualPlayer = roundOrder.get(0);
   }
 
   /**
@@ -77,7 +98,22 @@ public class GameController {
    * Finishes the current player's turn.
    */
   public void endTurn() {
-
+    if(roundOrder.size()==1){
+      if(roundNumber==maxRounds){
+        roundOrder.remove(0);
+        endGame();
+      }
+      else{
+        roundOrder.remove(0);
+        prepareRoundOrder();
+        actualPlayer = roundOrder.get(0);
+        roundNumber += 1;
+      }
+    }
+    else {
+      roundOrder.remove(0);
+      actualPlayer = roundOrder.get(0);
+    }
   }
 
   /**
@@ -88,14 +124,17 @@ public class GameController {
    */
   public void removeTactician(String tactician) {
     for(int i = 0; i<tacticians.size();i++){
-      if(tacticians.get(i).getName()==tactician) {
+      if(tacticians.get(i).getName().equals(tactician)) {
         List<IUnit> units = tacticians.get(i).getUnits();
         for(int j = 0; j<units.size();j++){
           units.get(j).getLocation().setUnit(null);
         }
         tacticians.remove(i);
+        roundOrder.remove(tacticians.get(i));
       }
     }
+    if(tacticians.size()==1)
+      endGame();
   }
 
   /**
@@ -104,7 +143,16 @@ public class GameController {
    *  the maximum number of turns the game can last
    */
   public void initGame(final int maxTurns) {
-
+    if(roundOrder.size()<tacticiansNum){
+      prepareRoundOrder();
+      this.actualPlayer = roundOrder.get(0);
+    }
+    if(tacticians.size()<tacticiansNum){
+      tacticians = createPlayers(tacticiansNum);
+    }
+    this.winners = null;
+    this.maxRounds = maxTurns;
+    this.roundNumber = 1;
   }
 
   /**
@@ -118,7 +166,7 @@ public class GameController {
    * @return the winner of this game, if the match ends in a draw returns a list of all the winners
    */
   public List<String> getWinners() {
-    return null;
+    return winners;
   }
 
   /**
@@ -195,58 +243,56 @@ public class GameController {
     actualPlayer.getSelectedUnit().giveItemTo(unit,item);
   }
 
-  public int[][] newMatrixMap(int size) {
-    Random random = new Random();
-    int[][] matrix = new int[size][size];
-    int n = 0;
-    for(int i=0;i<size;i++){
-      for(int j=0;j<size;j++) {
-        int k = random.nextInt(10);
-        if (k < 6) {
-          matrix[i][j] = 1;
-          n += 1;
-        }
-        else
-          matrix[i][j]=0;
-      }
-    }
-    return matrix;
+  public void assignUnit(IUnit unit) {
+    actualPlayer.getUnits().add(unit);
   }
 
-  public int locationQuantity(int[][] matrix){
-    int n = 0;
-    for(int i=0;i<matrix[0].length;i++){
-      for(int j=0;j<matrix[0].length;j++){
-        if(matrix[i][j]==1){
-          n+=1;
-        }
-      }
-    }
-    return n;
+  public void prepareRoundOrder() {
+    roundOrder.addAll(nextRoundOrder);
+    Collections.shuffle(nextRoundOrder,randomSeed);
+    while(nextRoundOrder.get(0)==roundOrder.get(tacticians.size()-1))
+      Collections.shuffle(nextRoundOrder, randomSeed);
   }
 
-  public Field matrixToMap(int[][] matrix) {
-    int n = locationQuantity(matrix);
-    Location[] locs = new Location[n];
-    int k = 0;
-    for(int i=0;i<matrix[0].length;i++){
-      for(int j=0;j<matrix[0].length;j++){
-        if(matrix[i][j]==1){
-          locs[k] = new Location(i,j);
-          k++;
-        }
+  public void endGame() {
+    winners = new ArrayList<>();
+    if(tacticians.size()==1)
+      winners.add(tacticians.get(0).getName());
+    else{
+      int maxUnitsQuantity = tacticianMaxUnitQuantity();
+      for (Tactician tactician : tacticians) {
+        if (tactician.getUnits().size() == maxUnitsQuantity)
+          winners.add(tacticians.get(0).getName());
       }
     }
-    Field map = new Field();
-    map.addCells(true,locs);
-    return map;
   }
 
-  public Field newMap(int size) {
-    Field map = matrixToMap(newMatrixMap(size));
-    while(!map.isConnected()){
-      map = matrixToMap(newMatrixMap(size));
+  public int tacticianMaxUnitQuantity() {
+    int max = 0;
+    for (Tactician tactician : tacticians) {
+      if(tactician.getUnits().size() > max)
+        max = tactician.getUnits().size();
     }
-    return map;
+    return max;
+  }
+
+  public List<Tactician> createPlayers(int numberOfPlayers) {
+    List<Tactician> players = new ArrayList<>();
+    for(int i = 0; i<numberOfPlayers; i++){
+      Tactician tactician = new Tactician("Player "+i,this.map);
+      players.add(tactician);
+    }
+    return players;
+  }
+
+  public void moveSelectedUnitTo(int x,int y) {
+    Location targetLocation = map.getCell(x,y);
+    getSelectedUnit().moveTo(targetLocation);
+  }
+
+  public void putSelectedUnitOn(int x, int y) {
+    Location cell = map.getCell(x,y);
+    getSelectedUnit().setLocation(cell);
+    cell.setUnit(getSelectedUnit());
   }
 }

@@ -52,13 +52,31 @@ public class Tactician {
             selectedItem = item;
     }
 
-    public void addUnit(IUnit unit) {
-        units.add(unit);
+    public int getSelectedUnitMovement() {
+        return getSelectedUnit().getMovement();
     }
 
-    public void removeUnit(IUnit unit) {
-        units.remove(unit);
+    public int getSelectedUnitCurrentHitPoints() {
+        return getSelectedUnit().getCurrentHitPoints();
     }
 
+    public int getSelectedUnitMaxHP() {
+        return getSelectedUnit().getMaxHP();
+    }
 
+    public int getSelectedItemPower() {
+        return getSelectedItem().getPower();
+    }
+
+    public int getSelectedItemMinRange() {
+        return getSelectedItem().getMinRange();
+    }
+
+    public int getSelectedItemMaxRange() {
+        return getSelectedItem().getMaxRange();
+    }
+
+    public String getSelectedItemName() {
+        return getSelectedItem().getName();
+    }
 }

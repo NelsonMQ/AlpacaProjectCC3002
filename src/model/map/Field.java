@@ -17,6 +17,7 @@ public class Field {
   private Map<String, Location> map = new HashMap<>();
   private Random random = new Random();
   private StringBuilder builder = new StringBuilder();
+  private int size;
 
   /**
    * Add cells to the map.
@@ -142,9 +143,19 @@ public class Field {
   }
 
   /**
+   * Returns the field size
+   * @param size the size of the field
+   */
+  public void setSize(int size) {
+    this.size = size;
+  }
+
+  /**
    * Return the size of the map
    * @return the size of the map
    */
-  //public int getSize() {  }
+  public int getSize() {
+    return this.size;
+  }
 
 }
