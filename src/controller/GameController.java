@@ -1,5 +1,7 @@
 package controller;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,8 +9,9 @@ import java.util.Collections;
 
 import model.Tactician;
 import model.factory.GameMapFactory.FieldFactory;
-import model.factory.IEquipableItemFactory.IEquipableItemFactory;
-import model.factory.IUnitFactory.IUnitFactory;
+import model.factory.IEquipableItemFactory.*;
+import model.factory.IUnitFactory.*;
+import model.items.Darkness;
 import model.items.IEquipableItem;
 import model.map.Field;
 import model.map.Location;
@@ -23,7 +26,7 @@ import model.units.IUnit;
  * @version 2.0
  * @since 2.0
  */
-public class GameController {
+public class GameController implements PropertyChangeListener {
   private List<Tactician> tacticians;
   private Field map;
   private Tactician actualPlayer;
@@ -48,6 +51,7 @@ public class GameController {
   public GameController(int numberOfPlayers, int mapSize) {
     tacticiansNum = numberOfPlayers;
     FieldFactory fieldFactory = new FieldFactory();
+    fieldFactory.setRandomSeed(new Random(10));
     this.map=fieldFactory.create(mapSize);
     tacticians = createPlayers(numberOfPlayers);
     nextRoundOrder = new ArrayList<>();
@@ -185,7 +189,9 @@ public class GameController {
    *     vertical position of the unit
    */
   public void selectUnitIn(int x, int y) {
-    actualPlayer.setSelectedUnit(map.getCell(x,y).getUnit());
+    if (actualPlayer.getUnits().contains(map.getCell(x, y).getUnit())){
+      actualPlayer.setSelectedUnit(map.getCell(x, y).getUnit());
+    }
   }
 
   /**
@@ -216,6 +222,12 @@ public class GameController {
   public void useItemOn(int x, int y) {
     IUnit unit = map.getCell(x,y).getUnit();
     getSelectedUnit().useItemOn(unit);
+    if(unit.getCurrentHitPoints()<=0){
+      removeUnit(unit);
+    }
+    if(getSelectedUnit().getCurrentHitPoints()<=0){
+      removeUnit(getSelectedUnit());
+    }
   }
 
   /**
@@ -225,8 +237,12 @@ public class GameController {
    *     the location of the item in the inventory.
    */
   public void selectItem(int index) {
-    IEquipableItem item = actualPlayer.getSelectedUnit().getItems().get(index);
+    IEquipableItem item = getSelectedUnit().getItems().get(index);
     actualPlayer.setSelectedItem(item);
+  }
+
+  public IEquipableItem getSelectedItem() {
+    return actualPlayer.getSelectedItem();
   }
 
   /**
@@ -239,12 +255,103 @@ public class GameController {
    */
   public void giveItemTo(int x, int y) {
     IUnit unit = map.getCell(x,y).getUnit();
-    IEquipableItem item = actualPlayer.getSelectedItem();
-    actualPlayer.getSelectedUnit().giveItemTo(unit,item);
+    IEquipableItem item = getSelectedItem();
+    getSelectedUnit().giveItemTo(unit,item);
   }
 
-  public void assignUnit(IUnit unit) {
-    actualPlayer.getUnits().add(unit);
+  public void assignAlpacaToActualPlayer(int x,int y) {
+    if(map.getCell(x,y).getUnit()==null) {
+      unitFactory = new AlpacaFactory();
+      IUnit unit = unitFactory.create();
+      actualPlayer.getUnits().add(unit);
+      putUnitOn(x, y, unit);
+    }
+  }
+
+  public void assignArcherToActualPlayer(int x, int y) {
+    if(map.getCell(x,y).getUnit()==null) {
+      unitFactory = new ArcherFactory();
+      IUnit unit = unitFactory.create();
+      actualPlayer.getUnits().add(unit);
+      putUnitOn(x, y, unit);
+    }
+  }
+
+  public void assignClericToActualPlayer(int x, int y) {
+    if(map.getCell(x,y).getUnit()==null) {
+      unitFactory = new ClericFactory();
+      IUnit unit = unitFactory.create();
+      actualPlayer.getUnits().add(unit);
+      putUnitOn(x, y, unit);
+    }
+  }
+
+  public void assignFighterToActualPlayer(int x, int y) {
+    if(map.getCell(x,y).getUnit()==null) {
+      unitFactory = new FighterFactory();
+      IUnit unit = unitFactory.create();
+      actualPlayer.getUnits().add(unit);
+      putUnitOn(x, y, unit);
+    }
+  }
+
+  public void assignHeroToActualPlayer(int x, int y) {
+    if(map.getCell(x,y).getUnit()==null) {
+      unitFactory = new HeroFactory();
+      IUnit unit = unitFactory.create();
+      actualPlayer.getUnits().add(unit);
+      putUnitOn(x, y, unit);
+    }
+  }
+
+  public void assignSorcererToActualPlayer(int x, int y) {
+    if(map.getCell(x,y).getUnit()==null) {
+      unitFactory = new SorcererFactory();
+      IUnit unit = unitFactory.create();
+      actualPlayer.getUnits().add(unit);
+      putUnitOn(x, y, unit);
+    }
+  }
+
+  public void assignSwordMasterToActualPlayer(int x, int y) {
+    if(map.getCell(x,y).getUnit()==null) {
+      unitFactory = new SwordMasterFactory();
+      IUnit unit = unitFactory.create();
+      actualPlayer.getUnits().add(unit);
+      putUnitOn(x, y, unit);
+    }
+  }
+
+  public void addAxeToSelectedUnit() {
+    getSelectedUnit().addItem(new AxeFactory().create());
+  }
+
+  public void addBowToSelectedUnit() {
+    getSelectedUnit().addItem(new BowFactory().create());
+  }
+
+  public void addDarknessToSelectedUnit() {
+    getSelectedUnit().addItem(new DarknessFactory().create());
+  }
+
+  public void addLightToSelectedUnit() {
+    getSelectedUnit().addItem(new LightFactory().create());
+  }
+
+  public void addSpearToSelectedUnit() {
+    getSelectedUnit().addItem(new SpearFactory().create());
+  }
+
+  public void addSpiritToSelectedUnit() {
+    getSelectedUnit().addItem(new SpiritFactory().create());
+  }
+
+  public void addStaffToSelectedUnit() {
+    getSelectedUnit().addItem(new StaffFactory().create());
+  }
+
+  public void addSwordToSelectedUnit() {
+    getSelectedUnit().addItem(new SwordFactory().create());
   }
 
   public void prepareRoundOrder() {
@@ -280,6 +387,7 @@ public class GameController {
     List<Tactician> players = new ArrayList<>();
     for(int i = 0; i<numberOfPlayers; i++){
       Tactician tactician = new Tactician("Player "+i,this.map);
+      tactician.addObserver(this);
       players.add(tactician);
     }
     return players;
@@ -290,9 +398,46 @@ public class GameController {
     getSelectedUnit().moveTo(targetLocation);
   }
 
-  public void putSelectedUnitOn(int x, int y) {
+  public void putUnitOn(int x, int y,IUnit unit) {
     Location cell = map.getCell(x,y);
-    getSelectedUnit().setLocation(cell);
-    cell.setUnit(getSelectedUnit());
+    if(cell.getUnit()==null) {
+      unit.setLocation(cell);
+      cell.setUnit(unit);
+    }
+  }
+
+  public void putSelectedUnitOn(int x, int y) {
+    putUnitOn(x,y,getSelectedUnit());
+  }
+
+  public void removeUnit(IUnit unit) {
+    unit.getLocation().setUnit(null);
+    for (Tactician tactician: tacticians) {
+      if(tactician.getUnits().contains(unit)){
+        tactician.getUnits().remove(unit);
+      }
+    }
+  }
+
+  public void propertyChange(PropertyChangeEvent evt){
+    String propertyName = evt.getPropertyName();
+    if("useItemOn".equals(propertyName)){
+      useItemOn((int)evt.getOldValue(),(int)evt.getNewValue());
+    }
+    if("selectUnitIn".equals(propertyName)){
+      selectUnitIn((int)evt.getOldValue(),(int)evt.getNewValue());
+    }
+    if("equipItemToSelectedUnit".equals(propertyName)){
+      equipItem((int)evt.getNewValue());
+    }
+    if("selectItem".equals(propertyName)){
+      selectItem((int)evt.getNewValue());
+    }
+    if("giveItemTo".equals(propertyName)){
+      giveItemTo((int)evt.getOldValue(),(int)evt.getNewValue());
+    }
+    if("moveUnitTo".equals(propertyName)){
+      moveSelectedUnitTo((int)evt.getOldValue(),(int)evt.getNewValue());
+    }
   }
 }

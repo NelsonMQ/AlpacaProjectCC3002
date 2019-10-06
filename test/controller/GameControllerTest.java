@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.stream.IntStream;
 import model.Tactician;
 import model.map.Field;
+import model.units.IUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,34 +143,118 @@ class GameControllerTest {
     }
     assertTrue(List.of("Player 3").containsAll(controller.getWinners()));
   }
-  /*
-  // Desde aquí en adelante, los tests deben definirlos completamente ustedes
+
   @Test
   void getSelectedUnit() {
+    assertNull(controller.getSelectedUnit());
+    controller.assignFighterToActualPlayer(1,2);
+    IUnit unit = controller.getTurnOwner().getUnits().get(0);
+    controller.getTurnOwner().setSelectedUnit(unit);
+    assertEquals(controller.getTurnOwner().getSelectedUnit(),controller.getSelectedUnit());
   }
 
   @Test
   void selectUnitIn() {
+    controller.selectUnitIn(0,0);
+    assertNull(controller.getSelectedUnit());
+    controller.assignSorcererToActualPlayer(0,0);
+    IUnit unit = controller.getTurnOwner().getUnits().get(0);
+    controller.selectUnitIn(0,0);
+    assertEquals(unit,controller.getSelectedUnit());
   }
 
   @Test
   void getItems() {
+    controller.assignSwordMasterToActualPlayer(0,0);
+    controller.selectUnitIn(0,0);
+    assertEquals(0,controller.getItems().size());
+
+    controller.addAxeToSelectedUnit();
+    assertEquals(1,controller.getItems().size());
+    assertEquals(controller.getSelectedUnit().getItems().get(0),controller.getItems().get(0));
   }
 
   @Test
   void equipItem() {
+    controller.assignArcherToActualPlayer(0,0);
+    controller.selectUnitIn(0,0);
+    controller.addBowToSelectedUnit();
+    assertNull(controller.getSelectedUnit().getEquippedItem());
+    controller.equipItem(0);
+    assertNotNull(controller.getSelectedUnit().getEquippedItem());
   }
 
   @Test
   void useItemOn() {
+    controller.assignFighterToActualPlayer(0,0);
+    controller.endTurn();
+    controller.assignSorcererToActualPlayer(1,0);
+    controller.selectUnitIn(1,0);
+    controller.addLightToSelectedUnit();
+    controller.useItemOn(0,0);
+    assertEquals(50,controller.getTacticians().get(1).getUnits().get(0).getCurrentHitPoints());
+    controller.equipItem(0);
+    controller.useItemOn(0,0);
+    assertEquals(40,controller.getTacticians().get(1).getUnits().get(0).getCurrentHitPoints());
+    assertEquals(50,controller.getSelectedUnit().getCurrentHitPoints());
   }
 
   @Test
   void selectItem() {
+    controller.assignHeroToActualPlayer(0,0);
+    controller.selectUnitIn(0,0);
+    controller.addSpearToSelectedUnit();
+    controller.selectItem(0);
+    assertEquals("Spear", controller.getSelectedItem().getName());
+    controller.addBowToSelectedUnit();
+    controller.addDarknessToSelectedUnit();
+    controller.selectItem(2);
+    assertEquals("Darkness", controller.getSelectedItem().getName());
   }
 
   @Test
   void giveItemTo() {
+    controller.assignAlpacaToActualPlayer(0,0);
+    controller.assignClericToActualPlayer(1,0);
+    controller.selectUnitIn(0,0);
+    controller.addDarknessToSelectedUnit();
+    controller.selectUnitIn(1,0);
+    assertEquals(0,controller.getItems().size());
+    controller.selectUnitIn(0,0);
+    controller.selectItem(0);
+    controller.giveItemTo(1,0);
+    controller.selectUnitIn(1,0);
+    assertEquals(1,controller.getItems().size());
+    assertEquals("Darkness",controller.getItems().get(0).getName());
+    controller.selectUnitIn(0,0);
+    assertEquals(0,controller.getItems().size());
   }
-  */
+
+  @Test
+  void removeUnitTest() {
+    controller.assignSwordMasterToActualPlayer(0,0);
+    assertEquals(1,controller.getTurnOwner().getUnits().size());
+    controller.removeUnit(controller.getTurnOwner().getUnits().get(0));
+    assertEquals(0,controller.getTurnOwner().getUnits().size());
+    assertNull(controller.getGameMap().getCell(0,0).getUnit());
+  }
+
+  @Test
+  void moveSelectedUnitTo() {
+    controller.assignSwordMasterToActualPlayer(0,0);
+    controller.selectUnitIn(0,0);
+    controller.moveSelectedUnitTo(0,1);
+    assertEquals(controller.getSelectedUnit(),controller.getGameMap().getCell(0,1).getUnit());
+  }
+
+  @Test
+  void addItemToSelectedUnitTest() {
+    controller.assignSwordMasterToActualPlayer(0,0);
+    controller.selectUnitIn(0,0);
+    controller.addSpiritToSelectedUnit();
+    assertEquals(1,controller.getItems().size());
+    controller.addStaffToSelectedUnit();
+    controller.addSwordToSelectedUnit();
+    assertEquals(3,controller.getItems().size());
+  }
 }

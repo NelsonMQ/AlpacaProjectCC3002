@@ -1,10 +1,13 @@
 package model;
 
 
+import controller.GameController;
 import model.items.IEquipableItem;
 import model.map.Field;
 import model.units.IUnit;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +17,7 @@ public class Tactician {
     private Field map;
     private IUnit selectedUnit;
     private IEquipableItem selectedItem;
+    private PropertyChangeSupport changes;
 
     public Tactician(String name, Field map) {
         this.name = name;
@@ -21,6 +25,11 @@ public class Tactician {
         this.map = map;
         this.selectedUnit = null;
         this.selectedItem = null;
+        this.changes = new PropertyChangeSupport(this);
+    }
+
+    public void addObserver(GameController controller) {
+        changes.addPropertyChangeListener(controller);
     }
 
     public String getName() {
@@ -78,5 +87,32 @@ public class Tactician {
 
     public String getSelectedItemName() {
         return getSelectedItem().getName();
+    }
+
+    public void selectUnitIn (int x, int y) {
+        changes.firePropertyChange("selectUnitIn",x,y);
+    }
+    /*
+    public List<IEquipableItem> getSelectedUnitItems () {
+    }
+    */
+    public void equipItemToSelectedUnit(int index) {
+        changes.firePropertyChange("equipItemToSelectedUnit",null,index);
+    }
+
+    public void useItemOn(int x, int y) {
+        changes.firePropertyChange("useItemOn",x,y);
+    }
+
+    public void selectItem(int index) {
+        changes.firePropertyChange("selectItem",null,index);
+    }
+
+    public void giveItemTo(int x, int y) {
+        changes.firePropertyChange("giveItemTo",x,y);
+    }
+
+    public void moveSelectedUnitTo(int x, int y) {
+        changes.firePropertyChange("moveUnitTo",x,y);
     }
 }
