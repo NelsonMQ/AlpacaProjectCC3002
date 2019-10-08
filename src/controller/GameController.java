@@ -26,7 +26,7 @@ import model.units.IUnit;
  * @version 2.0
  * @since 2.0
  */
-public class GameController implements PropertyChangeListener {
+public class GameController implements PropertyChangeListener{
   private List<Tactician> tacticians;
   private Field map;
   private Tactician actualPlayer;
@@ -39,6 +39,7 @@ public class GameController implements PropertyChangeListener {
   private Random randomSeed;
   private List<String> winners;
   private int tacticiansNum;
+  private List<IUnit> unitsToMove = new ArrayList<>();
 
   /**
    * Creates the controller for a new game.
@@ -112,11 +113,13 @@ public class GameController implements PropertyChangeListener {
         prepareRoundOrder();
         actualPlayer = roundOrder.get(0);
         roundNumber += 1;
+        unitsToMove.addAll(actualPlayer.getUnits());
       }
     }
     else {
       roundOrder.remove(0);
       actualPlayer = roundOrder.get(0);
+      unitsToMove.addAll(actualPlayer.getUnits());
     }
   }
 
@@ -154,9 +157,28 @@ public class GameController implements PropertyChangeListener {
     if(tacticians.size()<tacticiansNum){
       tacticians = createPlayers(tacticiansNum);
     }
+    setTacticiansHandler();
     this.winners = null;
     this.maxRounds = maxTurns;
     this.roundNumber = 1;
+    this.unitsToMove.addAll(actualPlayer.getUnits());
+  }
+
+  private void setTacticiansHandler() {
+    giveItemHandler giveItemHandler = new giveItemHandler(this);
+    moveUnitHandler moveUnitHandler = new moveUnitHandler(this);
+    selectUnitHandler selectUnitHandler = new selectUnitHandler(this);
+    selectItemHandler selectItemHandler = new selectItemHandler(this);
+    useItemHandler useItemHandler = new useItemHandler(this);
+    equipItemHandler equipItemHandler = new equipItemHandler(this);
+    for (Tactician tactician: tacticians) {
+      tactician.addEquipItemObserver(equipItemHandler);
+      tactician.addGiveItemObserver(giveItemHandler);
+      tactician.addMoveUnitObserver(moveUnitHandler);
+      tactician.addSelectItemObserver(selectItemHandler);
+      tactician.addUseItemObserver(useItemHandler);
+      tactician.addSelectUnitObserver(selectUnitHandler);
+    }
   }
 
   /**
@@ -387,15 +409,17 @@ public class GameController implements PropertyChangeListener {
     List<Tactician> players = new ArrayList<>();
     for(int i = 0; i<numberOfPlayers; i++){
       Tactician tactician = new Tactician("Player "+i,this.map);
-      tactician.addObserver(this);
       players.add(tactician);
     }
     return players;
   }
 
   public void moveSelectedUnitTo(int x,int y) {
-    Location targetLocation = map.getCell(x,y);
-    getSelectedUnit().moveTo(targetLocation);
+    Location targetLocation = map.getCell(x, y);
+    if(targetLocation.getUnit()==null && unitsToMove.contains(getSelectedUnit())) {
+      getSelectedUnit().moveTo(targetLocation);
+      unitsToMove.remove(getSelectedUnit());
+    }
   }
 
   public void putUnitOn(int x, int y,IUnit unit) {
@@ -419,25 +443,8 @@ public class GameController implements PropertyChangeListener {
     }
   }
 
-  public void propertyChange(PropertyChangeEvent evt){
-    String propertyName = evt.getPropertyName();
-    if("useItemOn".equals(propertyName)){
-      useItemOn((int)evt.getOldValue(),(int)evt.getNewValue());
-    }
-    if("selectUnitIn".equals(propertyName)){
-      selectUnitIn((int)evt.getOldValue(),(int)evt.getNewValue());
-    }
-    if("equipItemToSelectedUnit".equals(propertyName)){
-      equipItem((int)evt.getNewValue());
-    }
-    if("selectItem".equals(propertyName)){
-      selectItem((int)evt.getNewValue());
-    }
-    if("giveItemTo".equals(propertyName)){
-      giveItemTo((int)evt.getOldValue(),(int)evt.getNewValue());
-    }
-    if("moveUnitTo".equals(propertyName)){
-      moveSelectedUnitTo((int)evt.getOldValue(),(int)evt.getNewValue());
-    }
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    selectUnitIn((int)evt.getOldValue(),(int)evt.getNewValue());
   }
 }

@@ -1,11 +1,12 @@
 package model;
 
 
-import controller.GameController;
+import controller.*;
 import model.items.IEquipableItem;
 import model.map.Field;
 import model.units.IUnit;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -17,7 +18,12 @@ public class Tactician {
     private Field map;
     private IUnit selectedUnit;
     private IEquipableItem selectedItem;
-    private PropertyChangeSupport changes;
+    private PropertyChangeSupport selectUnit;
+    private PropertyChangeSupport equipItem;
+    private PropertyChangeSupport useItem;
+    private PropertyChangeSupport selectItem;
+    private PropertyChangeSupport giveItem;
+    private PropertyChangeSupport moveUnit;
 
     public Tactician(String name, Field map) {
         this.name = name;
@@ -25,11 +31,36 @@ public class Tactician {
         this.map = map;
         this.selectedUnit = null;
         this.selectedItem = null;
-        this.changes = new PropertyChangeSupport(this);
+        this.selectUnit = new PropertyChangeSupport(this);
+        this.equipItem = new PropertyChangeSupport(this);
+        this.useItem = new PropertyChangeSupport(this);
+        this.selectItem = new PropertyChangeSupport(this);
+        this.giveItem = new PropertyChangeSupport(this);
+        this.moveUnit = new PropertyChangeSupport(this);
     }
 
-    public void addObserver(GameController controller) {
-        changes.addPropertyChangeListener(controller);
+    public void addSelectUnitObserver(selectUnitHandler selectUnitHandler) {
+        selectUnit.addPropertyChangeListener(selectUnitHandler);
+    }
+
+    public void addEquipItemObserver(equipItemHandler equipItemHandler) {
+        equipItem.addPropertyChangeListener(equipItemHandler);
+    }
+
+    public void addUseItemObserver(useItemHandler useItemHandler) {
+        useItem.addPropertyChangeListener(useItemHandler);
+    }
+
+    public void addSelectItemObserver(selectItemHandler selectItemHandler) {
+        selectItem.addPropertyChangeListener(selectItemHandler);
+    }
+
+    public void addGiveItemObserver(giveItemHandler giveItemHandler) {
+        giveItem.addPropertyChangeListener(giveItemHandler);
+    }
+
+    public void addMoveUnitObserver(moveUnitHandler moveUnitHandler) {
+        moveUnit.addPropertyChangeListener(moveUnitHandler);
     }
 
     public String getName() {
@@ -90,29 +121,28 @@ public class Tactician {
     }
 
     public void selectUnitIn (int x, int y) {
-        changes.firePropertyChange("selectUnitIn",x,y);
+        selectUnit.firePropertyChange("selectUnitIn",x,y);
     }
-    /*
-    public List<IEquipableItem> getSelectedUnitItems () {
-    }
-    */
+/*
     public void equipItemToSelectedUnit(int index) {
-        changes.firePropertyChange("equipItemToSelectedUnit",null,index);
+        equipItem.firePropertyChange("equipItemToSelectedUnit",null,index);
     }
 
     public void useItemOn(int x, int y) {
-        changes.firePropertyChange("useItemOn",x,y);
+        useItem.firePropertyChange("useItemOn",x,y);
     }
 
     public void selectItem(int index) {
-        changes.firePropertyChange("selectItem",null,index);
+        selectItem.firePropertyChange("selectItem",null,index);
     }
 
     public void giveItemTo(int x, int y) {
-        changes.firePropertyChange("giveItemTo",x,y);
+        giveItem.firePropertyChange("giveItemTo",x,y);
     }
 
     public void moveSelectedUnitTo(int x, int y) {
-        changes.firePropertyChange("moveUnitTo",x,y);
+        moveUnit.firePropertyChange("moveUnitTo",x,y);
     }
+
+ */
 }
