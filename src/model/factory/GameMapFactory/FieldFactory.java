@@ -5,13 +5,32 @@ import model.map.Location;
 
 import java.util.Random;
 
+/**
+ * This class allows to create a random map. Thus, the controller don't have to worry about the creation of the map.
+ * @author Nelson Marambio
+ * @since 2.1
+ */
 public class FieldFactory {
     private Random randomSeed = null;
 
+    /**
+     * Creates a new map
+     * @param size
+     *      The size of the map
+     * @return
+     *      The map
+     */
     public Field create(int size) {
         return newMap(size);
     }
 
+    /**
+     * Creates a new map
+     * @param size
+     *      The size of the map
+     * @return
+     *      The map
+     */
     public Field newMap(int size) {
         Field map = matrixToMap(newMatrixMap(size));
         while(!map.isConnected()){
@@ -20,6 +39,13 @@ public class FieldFactory {
         return map;
     }
 
+    /**
+     * Converts a matrix (ones and zeros) in a map
+     * @param matrix
+     *      The matrix to be converted
+     * @return
+     *      The map
+     */
     public Field matrixToMap(int[][] matrix) {
         int n = locationQuantity(matrix);
         Location[] locs = new Location[n];
@@ -38,6 +64,13 @@ public class FieldFactory {
         return map;
     }
 
+    /**
+     * Returns the quantity of 'ones' in the matrix
+     * @param matrix
+     *      The matrix
+     * @return
+     *      The quantity of 'ones' in the matrix
+     */
     public int locationQuantity(int[][] matrix){
         int n = 0;
         for(int i=0;i<matrix[0].length;i++){
@@ -50,6 +83,13 @@ public class FieldFactory {
         return n;
     }
 
+    /**
+     * Creates a random matrix (ones and zeros)
+     * @param size
+     *      The size of the matrix (size x size)
+     * @return
+     *      The matrix
+     */
     public int[][] newMatrixMap(int size) {
         Random random;
         if(randomSeed != null) {
@@ -73,6 +113,11 @@ public class FieldFactory {
         return matrix;
     }
 
+    /**
+     * Set a random seed to create the matrix
+     * @param randomSeed
+     *      The random seed
+     */
     public void setRandomSeed(Random randomSeed) {
         this.randomSeed = randomSeed;
     }
