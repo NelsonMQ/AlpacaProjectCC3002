@@ -1,5 +1,6 @@
 package model.map;
 
+import javax.print.attribute.standard.PrinterMakeAndModel;
 import java.util.*;
 
 /**
@@ -15,7 +16,7 @@ import java.util.*;
 public class Field {
 
   private Map<String, Location> map = new HashMap<>();
-  private Random random = new Random();
+  private Random random = null;
   private StringBuilder builder = new StringBuilder();
   private int size;
 
@@ -28,6 +29,9 @@ public class Field {
    *     the locations that are going to be added to the map
    */
   public void addCells(final boolean connectAll, final Location... cells) {
+    if(random == null){
+      random = new Random();
+    }
     for (Location cell : cells) {
       addCell(cell);
       Location[] adjacentCells = getAdjacentCells(cell);
@@ -158,4 +162,12 @@ public class Field {
     return this.size;
   }
 
+  /**
+   * Set the random instance
+   * @param random
+   *      The random
+   */
+  public void setRandom(Random random){
+    this.random = random;
+  }
 }

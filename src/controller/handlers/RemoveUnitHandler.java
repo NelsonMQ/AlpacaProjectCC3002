@@ -1,17 +1,18 @@
 package controller.handlers;
 
 import controller.GameController;
+import model.units.IUnit;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * This class represents a handler to equip an item in the selected unit of the player.
+ * This class represents a handler to remove a unit.
  *
  * @author Nelson Marambio
  * @since 2.1
  */
-public class EquipItemHandler implements PropertyChangeListener {
+public class RemoveUnitHandler implements PropertyChangeListener {
     private GameController controller;
 
     /**
@@ -19,12 +20,12 @@ public class EquipItemHandler implements PropertyChangeListener {
      * @param controller
      *      The controller of the game
      */
-    public EquipItemHandler(GameController controller) {
-        this.controller = controller;
+    public RemoveUnitHandler(GameController controller) {
+        this.controller =  controller;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        controller.equipItem((int)evt.getNewValue());
+        controller.removeUnit((IUnit) evt.getNewValue());
     }
 }

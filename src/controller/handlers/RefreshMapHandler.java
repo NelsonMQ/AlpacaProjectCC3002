@@ -1,6 +1,7 @@
 package controller.handlers;
 
 import controller.GameController;
+import model.map.Field;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -11,7 +12,7 @@ import java.beans.PropertyChangeListener;
  * @author Nelson Marambio
  * @since 2.1
  */
-public class SelectItemHandler implements PropertyChangeListener {
+public class RefreshMapHandler implements PropertyChangeListener {
     private GameController controller;
 
     /**
@@ -19,12 +20,12 @@ public class SelectItemHandler implements PropertyChangeListener {
      * @param controller
      *      The controller of the game
      */
-    public SelectItemHandler(GameController controller) {
+    public RefreshMapHandler(GameController controller) {
         this.controller = controller;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        controller.selectItem((int)evt.getNewValue());
+        controller.refreshMap((Field)evt.getNewValue());
     }
 }

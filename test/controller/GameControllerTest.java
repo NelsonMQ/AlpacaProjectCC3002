@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.stream.IntStream;
 import model.Tactician;
 import model.map.Field;
+import model.map.Location;
 import model.units.IUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +22,16 @@ class GameControllerTest {
   private GameController controller;
   private long randomSeed;
   private List<String> testTacticians;
+  private long randomSeed2;
 
   @BeforeEach
   void setUp() {
     // Se define la semilla como un número aleatorio para generar variedad en los tests
-    randomSeed = new Random().nextLong();
+    randomSeed = 10;
+    randomSeed2 = 5;
     controller = new GameController(4, 7);
     testTacticians = List.of("Player 0", "Player 1", "Player 2", "Player 3");
+    controller.reRollMap(new Random(randomSeed),7,new Random(randomSeed2));
   }
 
   @Test
@@ -41,19 +45,14 @@ class GameControllerTest {
 
   @Test
   void getGameMap() {
-    //Cabe destacar que para crear el mapa se setea una semilla dentro del constructor de controller.
+    //Cabe destacar que para saber de que forma sera el mapa, se crea un mapa nuevo con semillas
+    // luego de la creacion del controller.
     Field gameMap = controller.getGameMap();
-    assertEquals(7, gameMap.getSize()); // getSize deben definirlo
+    assertEquals(7, gameMap.getSize());
     assertTrue(controller.getGameMap().isConnected());
-    // Para testear funcionalidades que dependen de valores aleatorios se hacen 2 cosas:
-    //  - Comprobar las invariantes de las estructuras que se crean (en este caso que el mapa tenga
-    //    las dimensiones definidas y que sea conexo.
-    //  - Setear una semilla para el generador de números aleatorios. Hacer esto hace que la
-    //    secuencia de números generada sea siempre la misma, así pueden predecir los
-    //    resultados que van a obtener.
-    //    Hay 2 formas de hacer esto en Java, le pueden pasar el seed al constructor de Random, o
-    //    usar el método setSeed de Random.
-    //  ESTO ÚLTIMO NO ESTÁ IMPLEMENTADO EN EL MAPA, ASÍ QUE DEBEN AGREGARLO (!)
+    assertTrue(controller.getGameMap().getMap().containsKey("(0, 0)"));
+    assertTrue(controller.getGameMap().getMap().containsKey("(0, 1)"));
+    assertFalse(controller.getGameMap().getMap().containsKey("(2, 0)"));
   }
 
   @Test

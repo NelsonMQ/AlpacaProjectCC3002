@@ -12,6 +12,7 @@ import java.util.Random;
  */
 public class FieldFactory {
     private Random randomSeed = null;
+    private Random randomSeed2 = null;
 
     /**
      * Creates a new map
@@ -21,7 +22,7 @@ public class FieldFactory {
      *      The map
      */
     public Field create(int size) {
-        return newMap(size);
+        return newMap(size,randomSeed);
     }
 
     /**
@@ -31,10 +32,10 @@ public class FieldFactory {
      * @return
      *      The map
      */
-    public Field newMap(int size) {
-        Field map = matrixToMap(newMatrixMap(size));
+    public Field newMap(int size, Random seed) {
+        Field map = matrixToMap(newMatrixMap(size,seed));
         while(!map.isConnected()){
-            map = matrixToMap(newMatrixMap(size));
+            map = matrixToMap(newMatrixMap(size,seed));
         }
         return map;
     }
@@ -59,7 +60,8 @@ public class FieldFactory {
             }
         }
         Field map = new Field();
-        map.addCells(true,locs);
+        map.setRandom(randomSeed2);
+        map.addCells(false,locs);
         map.setSize(matrix[0].length);
         return map;
     }
@@ -90,9 +92,9 @@ public class FieldFactory {
      * @return
      *      The matrix
      */
-    public int[][] newMatrixMap(int size) {
+    public int[][] newMatrixMap(int size,Random seed) {
         Random random;
-        if(randomSeed != null) {
+        if(seed != null) {
             random = randomSeed;
         }
         else
@@ -120,6 +122,15 @@ public class FieldFactory {
      */
     public void setRandomSeed(Random randomSeed) {
         this.randomSeed = randomSeed;
+    }
+
+    /**
+     * Set a random seed to create the connections of the map
+     * @param randomSeed2
+     *      The random seed
+     */
+    public void setRandomSeed2(Random randomSeed2) {
+        this.randomSeed2 = randomSeed2;
     }
 
 }

@@ -8,8 +8,6 @@ import java.util.Collections;
 import controller.handlers.*;
 import model.Tactician;
 import model.factory.GameMapFactory.FieldFactory;
-import model.factory.IEquipableItemFactory.*;
-import model.factory.IUnitFactory.*;
 import model.items.IEquipableItem;
 import model.map.Field;
 import model.map.Location;
@@ -29,13 +27,11 @@ public class GameController{
   private Tactician actualPlayer;
   private int roundNumber;
   private int maxRounds;
-  private IUnitFactory unitFactory;
   private List<Tactician> roundOrder;
   private List<Tactician> nextRoundOrder;
   private Random randomSeed;
   private List<String> winners;
   private int tacticiansNum;
-  private List<IUnit> unitsToMove = new ArrayList<>();
 
   /**
    * Creates the controller for a new game.
@@ -48,8 +44,7 @@ public class GameController{
   public GameController(int numberOfPlayers, int mapSize) {
     tacticiansNum = numberOfPlayers;
     FieldFactory fieldFactory = new FieldFactory();
-    fieldFactory.setRandomSeed(new Random(10));
-    this.map=fieldFactory.create(mapSize);
+    this.map = fieldFactory.create(mapSize);
     tacticians = createPlayers(numberOfPlayers);
     nextRoundOrder = new ArrayList<>();
     nextRoundOrder.addAll(tacticians);
@@ -109,13 +104,13 @@ public class GameController{
         prepareRoundOrder();
         actualPlayer = roundOrder.get(0);
         roundNumber += 1;
-        unitsToMove.addAll(actualPlayer.getUnits());
+        actualPlayer.getUnitsToMove().addAll(actualPlayer.getUnits());
       }
     }
     else {
       roundOrder.remove(0);
       actualPlayer = roundOrder.get(0);
-      unitsToMove.addAll(actualPlayer.getUnits());
+      actualPlayer.getUnitsToMove().addAll(actualPlayer.getUnits());
     }
   }
 
@@ -157,28 +152,18 @@ public class GameController{
     this.winners = null;
     this.maxRounds = maxTurns;
     this.roundNumber = 1;
-    this.unitsToMove.addAll(actualPlayer.getUnits());
+    actualPlayer.getUnitsToMove().addAll(actualPlayer.getUnits());
   }
 
   /**
    * Set the tactician handlers
    */
   private void setTacticiansHandler() {
-    GiveItemHandler giveItemHandler = new GiveItemHandler(this);
-    MoveUnitHandler moveUnitHandler = new MoveUnitHandler(this);
-    SelectUnitHandler selectUnitHandler = new SelectUnitHandler(this);
-    SelectItemHandler selectItemHandler = new SelectItemHandler(this);
-    UseItemHandler useItemHandler = new UseItemHandler(this);
-    EquipItemHandler equipItemHandler = new EquipItemHandler(this);
-    EndTurnHandler endTurnHandler = new EndTurnHandler(this);
+    RefreshMapHandler refreshMapHandler = new RefreshMapHandler(this);
+    RemoveUnitHandler removeUnitHandler = new RemoveUnitHandler(this);
     for (Tactician tactician: tacticians) {
-      tactician.addEquipItemObserver(equipItemHandler);
-      tactician.addGiveItemObserver(giveItemHandler);
-      tactician.addMoveUnitObserver(moveUnitHandler);
-      tactician.addSelectItemObserver(selectItemHandler);
-      tactician.addUseItemObserver(useItemHandler);
-      tactician.addSelectUnitObserver(selectUnitHandler);
-      tactician.addEndTurnObserver(endTurnHandler);
+      tactician.addRefreshMapObserver(refreshMapHandler);
+      tactician.addRemoveUnitObserver(removeUnitHandler);
     }
   }
 
@@ -212,9 +197,7 @@ public class GameController{
    *     vertical position of the unit
    */
   public void selectUnitIn(int x, int y) {
-    if (actualPlayer.getUnits().contains(map.getCell(x, y).getUnit())){
-      actualPlayer.setSelectedUnit(map.getCell(x, y).getUnit());
-    }
+    actualPlayer.selectUnitIn(x,y);
   }
 
   /**
@@ -231,7 +214,7 @@ public class GameController{
    *     the location of the item in the inventory.
    */
   public void equipItem(int index) {
-    getSelectedUnit().equipItem(getItems().get(index));
+    actualPlayer.equipItemToSelectedUnit(index);
   }
 
   /**
@@ -243,14 +226,7 @@ public class GameController{
    *     vertical position of the target
    */
   public void useItemOn(int x, int y) {
-    IUnit unit = map.getCell(x,y).getUnit();
-    getSelectedUnit().useItemOn(unit);
-    if(unit.getCurrentHitPoints()<=0){
-      removeUnit(unit);
-    }
-    if(getSelectedUnit().getCurrentHitPoints()<=0){
-      removeUnit(getSelectedUnit());
-    }
+    actualPlayer.useItemOn(x,y);
   }
 
   /**
@@ -260,8 +236,7 @@ public class GameController{
    *     the location of the item in the inventory.
    */
   public void selectItem(int index) {
-    IEquipableItem item = getSelectedUnit().getItems().get(index);
-    actualPlayer.setSelectedItem(item);
+    actualPlayer.selectItem(index);
   }
 
   /**
@@ -282,9 +257,7 @@ public class GameController{
    *     vertical position of the target
    */
   public void giveItemTo(int x, int y) {
-    IUnit unit = map.getCell(x,y).getUnit();
-    IEquipableItem item = getSelectedItem();
-    getSelectedUnit().giveItemTo(unit,item);
+    actualPlayer.giveItemTo(x,y);
   }
 
   /**
@@ -295,13 +268,7 @@ public class GameController{
    *      vertical position where the unit will be set
    */
   public void assignAlpacaToActualPlayer(int x,int y) {
-    if(map.getCell(x,y).getUnit()==null) {
-      unitFactory = new AlpacaFactory();
-      IUnit unit = unitFactory.create();
-      actualPlayer.getUnits().add(unit);
-      putUnitOn(x, y, unit);
-      unitsToMove.add(unit);
-    }
+    actualPlayer.assignAlpaca(x,y);
   }
 
   /**
@@ -312,13 +279,7 @@ public class GameController{
    *      vertical position where the unit will be set
    */
   public void assignArcherToActualPlayer(int x, int y) {
-    if(map.getCell(x,y).getUnit()==null) {
-      unitFactory = new ArcherFactory();
-      IUnit unit = unitFactory.create();
-      actualPlayer.getUnits().add(unit);
-      putUnitOn(x, y, unit);
-      unitsToMove.add(unit);
-    }
+    actualPlayer.assignArcher(x,y);
   }
 
   /**
@@ -329,13 +290,7 @@ public class GameController{
    *      vertical position where the unit will be set
    */
   public void assignClericToActualPlayer(int x, int y) {
-    if(map.getCell(x,y).getUnit()==null) {
-      unitFactory = new ClericFactory();
-      IUnit unit = unitFactory.create();
-      actualPlayer.getUnits().add(unit);
-      putUnitOn(x, y, unit);
-      unitsToMove.add(unit);
-    }
+    actualPlayer.assignCleric(x,y);
   }
 
   /**
@@ -346,13 +301,7 @@ public class GameController{
    *      vertical position where the unit will be set
    */
   public void assignFighterToActualPlayer(int x, int y) {
-    if(map.getCell(x,y).getUnit()==null) {
-      unitFactory = new FighterFactory();
-      IUnit unit = unitFactory.create();
-      actualPlayer.getUnits().add(unit);
-      putUnitOn(x, y, unit);
-      unitsToMove.add(unit);
-    }
+    actualPlayer.assignFighter(x,y);
   }
 
   /**
@@ -363,13 +312,7 @@ public class GameController{
    *      vertical position where the unit will be set
    */
   public void assignHeroToActualPlayer(int x, int y) {
-    if(map.getCell(x,y).getUnit()==null) {
-      unitFactory = new HeroFactory();
-      IUnit unit = unitFactory.create();
-      actualPlayer.getUnits().add(unit);
-      putUnitOn(x, y, unit);
-      unitsToMove.add(unit);
-    }
+    actualPlayer.assignHero(x,y);
   }
 
   /**
@@ -380,13 +323,7 @@ public class GameController{
    *      vertical position where the unit will be set
    */
   public void assignSorcererToActualPlayer(int x, int y) {
-    if(map.getCell(x,y).getUnit()==null) {
-      unitFactory = new SorcererFactory();
-      IUnit unit = unitFactory.create();
-      actualPlayer.getUnits().add(unit);
-      putUnitOn(x, y, unit);
-      unitsToMove.add(unit);
-    }
+    actualPlayer.assignSorcerer(x,y);
   }
 
   /**
@@ -397,69 +334,63 @@ public class GameController{
    *      vertical position where the unit will be set
    */
   public void assignSwordMasterToActualPlayer(int x, int y) {
-    if(map.getCell(x,y).getUnit()==null) {
-      unitFactory = new SwordMasterFactory();
-      IUnit unit = unitFactory.create();
-      actualPlayer.getUnits().add(unit);
-      putUnitOn(x, y, unit);
-      unitsToMove.add(unit);
-    }
+    actualPlayer.assignSwordMaster(x,y);
   }
 
   /**
    * Adds an Axe to the selected unit
    */
   public void addAxeToSelectedUnit() {
-    getSelectedUnit().addItem(new AxeFactory().create());
+    actualPlayer.addAxeToSelectedUnit();
   }
 
   /**
    * Adds a Bow to the selected unit
    */
   public void addBowToSelectedUnit() {
-    getSelectedUnit().addItem(new BowFactory().create());
+    actualPlayer.addBowToSelectedUnit();
   }
 
   /**
    * Adds a Darkness to the selected unit
    */
   public void addDarknessToSelectedUnit() {
-    getSelectedUnit().addItem(new DarknessFactory().create());
+    actualPlayer.addDarknessToSelectedUnit();
   }
 
   /**
    * Adds a Light to the selected unit
    */
   public void addLightToSelectedUnit() {
-    getSelectedUnit().addItem(new LightFactory().create());
+    actualPlayer.addLightToSelectedUnit();
   }
 
   /**
    * Adds a Spear to the selected unit
    */
   public void addSpearToSelectedUnit() {
-    getSelectedUnit().addItem(new SpearFactory().create());
+    actualPlayer.addSpearToSelectedUnit();
   }
 
   /**
    * Adds a Spirit to the selected unit
    */
   public void addSpiritToSelectedUnit() {
-    getSelectedUnit().addItem(new SpiritFactory().create());
+    actualPlayer.addSpiritToSelectedUnit();
   }
 
   /**
    * Adds a Staff to the selected unit
    */
   public void addStaffToSelectedUnit() {
-    getSelectedUnit().addItem(new StaffFactory().create());
+    actualPlayer.addStaffToSelectedUnit();
   }
 
   /**
    * Adds a Sword to the selected unit
    */
   public void addSwordToSelectedUnit() {
-    getSelectedUnit().addItem(new SwordFactory().create());
+    actualPlayer.addSwordToSelectedUnit();
   }
 
   /**
@@ -526,39 +457,7 @@ public class GameController{
    *      vertical position where the unit will be moved
    */
   public void moveSelectedUnitTo(int x,int y) {
-    Location targetLocation = map.getCell(x, y);
-    if(targetLocation.getUnit()==null && unitsToMove.contains(getSelectedUnit())) {
-      getSelectedUnit().moveTo(targetLocation);
-      unitsToMove.remove(getSelectedUnit());
-    }
-  }
-
-  /**
-   * Puts a unit on the (x,y) cell
-   * @param x
-   *      horizontal position where the unit will be set
-   * @param y
-   *      vertical position where the unit will be set
-   * @param unit
-   *      the unit
-   */
-  public void putUnitOn(int x, int y,IUnit unit) {
-    Location cell = map.getCell(x,y);
-    if(cell.getUnit()==null) {
-      unit.setLocation(cell);
-      cell.setUnit(unit);
-    }
-  }
-
-  /**
-   * Puts the selected unit on the (x,y) cell
-   * @param x
-   *      horizontal position where the unit will be set
-   * @param y
-   *      vertical position where the unit will be set
-   */
-  public void putSelectedUnitOn(int x, int y) {
-    putUnitOn(x,y,getSelectedUnit());
+    actualPlayer.moveSelectedUnitTo(x,y);
   }
 
   /**
@@ -573,5 +472,97 @@ public class GameController{
         tactician.getUnits().remove(unit);
       }
     }
+    refreshMap(map);
+  }
+
+  /**
+   * Changes the map for a new one (for tests)
+   * @param seed
+   *      Cell seed
+   * @param size
+   *      Size of the map
+   * @param seed2
+   *      Connections seed
+   */
+  public void reRollMap(Random seed,int size,Random seed2){
+    FieldFactory fieldFactory = new FieldFactory();
+    fieldFactory.setRandomSeed(seed);
+    fieldFactory.setRandomSeed2(seed2);
+    this.map = fieldFactory.create(size);
+    refreshMap(map);
+  }
+
+  /**
+   * The map will be updated in all players
+   * @param map the updated map
+   */
+  public void refreshMap(Field map) {
+    this.map = map;
+    for (Tactician tactician:tacticians) {
+      tactician.setMap(map);
+    }
+  }
+
+  /**
+   * Returns the number of cells the unit can move
+   * @return
+   *      The number of cells the unit can move
+   */
+  public int getSelectedUnitMovement() {
+    return actualPlayer.getSelectedUnitMovement();
+  }
+
+  /**
+   * Returns the current hit points of the unit
+   * @return
+   *      The current hit points of the unit
+   */
+  public int getSelectedUnitCurrentHitPoints() {
+    return actualPlayer.getSelectedUnitCurrentHitPoints();
+  }
+
+  /**
+   * Returns the max HP of the unit
+   * @return
+   *      The max HP of the unit
+   */
+  public int getSelectedUnitMaxHP() {
+    return actualPlayer.getSelectedUnitMaxHP();
+  }
+
+  /**
+   * Returns the power of the selected item
+   * @return
+   *      The power of the selected item
+   */
+  public int getSelectedItemPower() {
+    return actualPlayer.getSelectedItemPower();
+  }
+
+  /**
+   * Returns the min range of the selected item
+   * @return
+   *      The min range of the selected item
+   */
+  public int getSelectedItemMinRange() {
+    return actualPlayer.getSelectedItemMinRange();
+  }
+
+  /**
+   * Returns the max range of the selected item
+   * @return
+   *      The max range of the selected item
+   */
+  public int getSelectedItemMaxRange() {
+    return actualPlayer.getSelectedItemMaxRange();
+  }
+
+  /**
+   * Returns the name of the selected item
+   * @return
+   *      The name of the selected item
+   */
+  public String getSelectedItemName() {
+    return actualPlayer.getSelectedItemName();
   }
 }
