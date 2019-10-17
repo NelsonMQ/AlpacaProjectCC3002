@@ -232,10 +232,18 @@ class GameControllerTest {
   @Test
   void removeUnitTest() {
     controller.assignSwordMasterToActualPlayer(0,0);
+    controller.assignSwordMasterToActualPlayer(0,1);
+    assertEquals(2,controller.getTurnOwner().getUnits().size());
+    controller.removeUnit(controller.getTurnOwner().getUnits().get(1));
+    assertEquals(1,controller.getTurnOwner().getUnits().size());
+    assertNull(controller.getGameMap().getCell(0,1).getUnit());
+
+    controller.endTurn();
+    controller.assignSwordMasterToActualPlayer(0,1);
     assertEquals(1,controller.getTurnOwner().getUnits().size());
     controller.removeUnit(controller.getTurnOwner().getUnits().get(0));
     assertEquals(0,controller.getTurnOwner().getUnits().size());
-    assertNull(controller.getGameMap().getCell(0,0).getUnit());
+    assertNull(controller.getGameMap().getCell(0,1).getUnit());
   }
 
   @Test
@@ -255,5 +263,58 @@ class GameControllerTest {
     controller.addStaffToSelectedUnit();
     controller.addSwordToSelectedUnit();
     assertEquals(3,controller.getItems().size());
+  }
+
+  @Test
+  void checkHeroesTest() {
+    //We assign units (heroes) and items
+    controller.assignSorcererToActualPlayer(0,0);
+    controller.assignHeroToActualPlayer(0,1);
+    controller.selectUnitIn(0,1);
+    controller.addSpearToSelectedUnit();
+    controller.equipItem(0);
+    controller.endTurn();
+    controller.assignHeroToActualPlayer(0,2);
+    controller.endTurn();
+    controller.assignHeroToActualPlayer(0,3);
+    controller.selectUnitIn(0,3);
+    controller.addSpearToSelectedUnit();
+    controller.equipItem(0);
+    controller.endTurn();
+    controller.assignHeroToActualPlayer(1,0);
+    controller.endTurn();
+
+    //Here the game begins
+    controller.initGame(5);
+    controller.selectUnitIn(0,0);
+    controller.addLightToSelectedUnit();
+    controller.equipItem(0);
+    //We will kill a hero
+    controller.useItemOn(1,0);
+    controller.useItemOn(1,0);
+    controller.useItemOn(1,0);
+    controller.useItemOn(1,0);
+    controller.useItemOn(1,0);
+    //We check the number of tacticians
+    assertEquals(3,controller.getTacticians().size());
+    //Here we kill another hero
+    controller.moveSelectedUnitTo(1,0);
+    controller.endTurn();
+    controller.selectUnitIn(0,2);
+    controller.addSpearToSelectedUnit();
+    controller.equipItem(0);
+    controller.useItemOn(0,1);
+    controller.useItemOn(0,1);
+    controller.useItemOn(0,1);
+    controller.useItemOn(0,1);
+    controller.useItemOn(0,1);
+    assertEquals(2,controller.getTacticians().size());
+    assertEquals("Player 0",controller.getTacticians().get(0).getName());
+    assertEquals("Player 3",controller.getTacticians().get(1).getName());
+    //Here we kill our hero
+    controller.useItemOn(0,3);
+    //So, the winner should be Player 0
+    assertEquals("Player 0",controller.getWinners().get(0));
+
   }
 }

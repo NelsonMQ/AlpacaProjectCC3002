@@ -32,6 +32,10 @@ public class Tactician {
     private List<IUnit> unitsToMove;
     private PropertyChangeSupport refreshMap;
     private PropertyChangeSupport removeUnit;
+    private PropertyChangeSupport removeTactician;
+    private PropertyChangeSupport checkHeroes;
+    private List<IUnit> heroes;
+    private int heroesNumber;
 
 
     /**
@@ -49,7 +53,11 @@ public class Tactician {
         this.selectedItem = null;
         this.refreshMap = new PropertyChangeSupport(this);
         this.removeUnit = new PropertyChangeSupport(this);
+        this.removeTactician = new PropertyChangeSupport(this);
+        this.checkHeroes = new PropertyChangeSupport(this);
         this.unitsToMove = new ArrayList<>();
+        this.heroes = new ArrayList<>();
+        this.heroesNumber = 0;
     }
 
     /**
@@ -68,6 +76,24 @@ public class Tactician {
      */
     public void addRefreshMapObserver(RefreshMapHandler refreshMapHandler) {
         refreshMap.addPropertyChangeListener(refreshMapHandler);
+    }
+
+    /**
+     * Add an observer to the tactician
+     * @param removeTacticianHandler
+     *      The Handler that gonna be called
+     */
+    public void addRemoveTacticianObserver(RemoveTacticianHandler removeTacticianHandler) {
+        removeTactician.addPropertyChangeListener(removeTacticianHandler);
+    }
+
+    /**
+     * Add an observer to the tactician
+     * @param checkHeroesHandler
+     *      The Handler that gonna be called
+     */
+    public void addCheckHeroesObserver(CheckHeroesHandler checkHeroesHandler) {
+        checkHeroes.addPropertyChangeListener(checkHeroesHandler);
     }
 
     /**
@@ -113,6 +139,20 @@ public class Tactician {
      */
     public IEquipableItem getSelectedItem() {
         return selectedItem;
+    }
+
+    /**
+     * @return The tactician's heroes.
+     */
+    public List<IUnit> getHeroes() {
+        return heroes;
+    }
+
+    /**
+     * @return The number of heroes that the unit has.
+     */
+    public int getHeroesNumber() {
+        return heroesNumber;
     }
 
     /**
@@ -255,6 +295,7 @@ public class Tactician {
         if(getSelectedUnit().getCurrentHitPoints()<=0){
             removeUnit.firePropertyChange("removeUnit",null,getSelectedUnit());
         }
+        checkHeroes.firePropertyChange("checkHeroes",null,1);
     }
 
     /**
@@ -384,6 +425,8 @@ public class Tactician {
             getUnits().add(unit);
             putUnitOn(x, y, unit);
             unitsToMove.add(unit);
+            heroes.add(unit);
+            heroesNumber++;
         }
     }
 

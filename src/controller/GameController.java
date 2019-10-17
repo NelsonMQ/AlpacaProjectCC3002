@@ -10,7 +10,6 @@ import model.Tactician;
 import model.factory.GameMapFactory.FieldFactory;
 import model.items.IEquipableItem;
 import model.map.Field;
-import model.map.Location;
 import model.units.IUnit;
 
 /**
@@ -51,8 +50,10 @@ public class GameController{
     randomSeed = new Random(10);
     Collections.shuffle(nextRoundOrder, randomSeed);
     roundOrder = new ArrayList<>();
-    prepareRoundOrder();
+    roundOrder.addAll(nextRoundOrder);
     this.actualPlayer = roundOrder.get(0);
+    this.roundNumber = 0;
+    this.maxRounds = -1;
   }
 
   /**
@@ -127,8 +128,8 @@ public class GameController{
         for(int j = 0; j<units.size();j++){
           units.get(j).getLocation().setUnit(null);
         }
-        tacticians.remove(i);
         roundOrder.remove(tacticians.get(i));
+        tacticians.remove(i);
       }
     }
     if(tacticians.size()==1)
@@ -161,9 +162,13 @@ public class GameController{
   private void setTacticiansHandler() {
     RefreshMapHandler refreshMapHandler = new RefreshMapHandler(this);
     RemoveUnitHandler removeUnitHandler = new RemoveUnitHandler(this);
+    RemoveTacticianHandler removeTacticianHandler = new RemoveTacticianHandler(this);
+    CheckHeroesHandler checkHeroesHandler = new CheckHeroesHandler(this);
     for (Tactician tactician: tacticians) {
       tactician.addRefreshMapObserver(refreshMapHandler);
       tactician.addRemoveUnitObserver(removeUnitHandler);
+      tactician.addRemoveTacticianObserver(removeTacticianHandler);
+      tactician.addCheckHeroesObserver(checkHeroesHandler);
     }
   }
 
@@ -397,10 +402,16 @@ public class GameController{
    * Prepares the order of the round
    */
   public void prepareRoundOrder() {
-    roundOrder.addAll(nextRoundOrder);
-    Collections.shuffle(nextRoundOrder,randomSeed);
-    while(nextRoundOrder.get(0)==roundOrder.get(tacticians.size()-1))
-      Collections.shuffle(nextRoundOrder, randomSeed);
+    if(roundNumber==0){
+      roundOrder.addAll(nextRoundOrder);
+    }
+    else {
+      roundOrder.addAll(tacticians);
+      Collections.shuffle(roundOrder, randomSeed);
+      while (roundOrder.get(0) == nextRoundOrder.get(tacticians.size() - 1))
+        Collections.shuffle(roundOrder, randomSeed);
+      nextRoundOrder.addAll(roundOrder);
+    }
   }
 
   /**
@@ -470,6 +481,9 @@ public class GameController{
     for (Tactician tactician: tacticians) {
       if(tactician.getUnits().contains(unit)){
         tactician.getUnits().remove(unit);
+        if(tactician.getHeroes().contains(unit)){
+          tactician.getHeroes().remove(unit);
+        }
       }
     }
     refreshMap(map);
@@ -565,4 +579,23 @@ public class GameController{
   public String getSelectedItemName() {
     return actualPlayer.getSelectedItemName();
   }
+
+  /**
+   * Removes the tacticians who have a death hero.
+   */
+  public void checkPlayersHeroes() {
+    for (Tactician tactician: tacticians) {
+      if(tactician.getHeroes().size()<tactician.getHeroesNumber()){
+        if(actualPlayer.equals(tactician)){
+          endTurn();
+          removeTactician(tactician.getName());
+          return;
+        }
+        else {
+          removeTactician(tactician.getName());
+        }
+      }
+    }
+  }
+
 }
