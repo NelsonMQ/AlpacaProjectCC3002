@@ -1,5 +1,7 @@
 <h1 style="background-color: black;">AlpacaProjectCC3002</h1>
- 
+
+#Primera Entrega
+
 <p>Para la realización de lo pedido, primero se revisó si el código implementaba una buena metodología de diseño. Al revisarlo se encontró que el metodo equipItem usaba "instance of" para equipar los objetos. Es por esto que este método tuvo que ser modificado, para lo cual se implementó a través de Double Dispatch, debido a que cada unidad podía equiparse un tipo diferente de objeto. Además se agregó una restricción al equipar un item, ahora la unidad debe tener el item en su lista para ser añadido.</p>
 
 <p>En cuanto a los requerimientos pedidos por nuestro cliente, se pedía implementar un sistema de Combate, una forma de intercambiar items entre unidades y además, añadir un nuevo tipo de unidad con tres nuevos items.</p>
@@ -15,3 +17,31 @@ En cuanto al requisito del intercambio de items, se añadieron métodos para añ
 Para el último requisito, se añadieron nuevas clases al programa, una para la nueva unidad, y tres para los diferentes items nuevos. La nueva clase de la unidad extendío la clase Abstracta de unidades, y las clases de los nuevos items, extendieron la clase abstracta de items de ataque. Como estos items posían debilidades y fortalezas, entonces se tuvieron que añadir nuevos métodos a los demás items, para que así recibieran el daño correspondiente. También se añadió un método para equipar los items a las unidades correspondientes. Lo anterior no fue difícil, dado que estaba implementado con Double Dispatch.
 
 Para la ejecución del programa basta correr los test ubicados en la carpeta "test".
+
+#Segunda Entrega
+Para esta entrega se pedia implementar un controlador para el juego, además de una entidad Tactician que representaría a cada jugador dentro del juego. A continuación veremos lo principal a implementar en cada uno, y la solución que se dio a estas.
+
+##Tactician
+
+-Debe ser capaz de realizar todas las acciones de la Entrega 1 y acciones del codigo base
+-Debe conocer las unidades que posee, y el mapa
+-Puede mover a todas sus unidades, pero solo una vez a cada una dentro del turno
+-Capacidad de ver los datos de sus unidades
+
+##Controller
+
+-Debe mantener los tacticians, mapa del juego y player actual
+-Cualquier cambio en el estado del juego debe ser notificado al controlador para que decida que hacer
+-Terminar turno y pasar al siguiente jugador
+-Si un heroe es derrotado en el turno de otro jugador que no sea el dueño, pierde la partida y se retira del juego junto a sus unidades
+-Si el heroe muere en el turno de su dueño, termina el turno y se retira al jugador
+-Se puede tener más de un heroe, pero se pierde si alguno es derrotado
+-Turnos aleatorios en cada ronda, el último no puede ser el primero en el siguiente turno
+-Al crearse debe crear los jugadores, un mapa aleatorio e iniciar y asignar unidades
+-Manera sencilla de crear unidades e items, y que se puedan asociar
+-No puede haber dos unidades en la misma casilla, si alguna es derrotada se debe retirar
+
+##Maneras de ganar
+
+-El resto de los jugadores se han retirado
+-Se alcanza la máxima cantidad de rondas. En este caso gana el jugador con mayor cantidad de unidades, si son iguales, empatan
