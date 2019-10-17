@@ -66,6 +66,7 @@ public class FieldFactory {
         return map;
     }
 
+
     /**
      * Returns the quantity of 'ones' in the matrix
      * @param matrix
@@ -125,12 +126,11 @@ public class FieldFactory {
     }
 
     /**
-     * Set a random seed to create the connections of the map
+     * Set a random seed to create the connections
      * @param randomSeed2
      *      The random seed
      */
-    public void setRandomSeed2(Random randomSeed2) {
+    public void setRandomSeed2(Random randomSeed2){
         this.randomSeed2 = randomSeed2;
     }
-
 }

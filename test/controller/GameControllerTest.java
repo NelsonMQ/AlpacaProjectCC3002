@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 import model.Tactician;
+import model.factory.GameMapFactory.FieldFactory;
 import model.map.Field;
 import model.map.Location;
 import model.units.IUnit;
@@ -20,18 +21,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameControllerTest {
 
   private GameController controller;
-  private long randomSeed;
+  private long randomSeed = new Random().nextLong();
+  private long randomSeed1 = new Random().nextLong();
   private List<String> testTacticians;
-  private long randomSeed2;
 
   @BeforeEach
   void setUp() {
-    // Se define la semilla como un número aleatorio para generar variedad en los tests
-    randomSeed = 10;
-    randomSeed2 = 5;
+    long seed = 10;
     controller = new GameController(4, 7);
     testTacticians = List.of("Player 0", "Player 1", "Player 2", "Player 3");
-    controller.reRollMap(new Random(randomSeed),7,new Random(randomSeed2));
+    //A seed is set to connect the map to help the moveUnitTest, useItemTest, etc.
+    long randomSeed2 = 5;
+    controller.reRollMap(new Random(seed),7,new Random(randomSeed2));
+    //A seed is set to select the roundOrder to help some tests methods.
+    controller.setRandomSeed(new Random(seed));
+    controller.prepareFirstRound();
   }
 
   @Test
@@ -45,14 +49,28 @@ class GameControllerTest {
 
   @Test
   void getGameMap() {
-    //Cabe destacar que para saber de que forma sera el mapa, se crea un mapa nuevo con semillas
-    // luego de la creacion del controller.
     Field gameMap = controller.getGameMap();
     assertEquals(7, gameMap.getSize());
     assertTrue(controller.getGameMap().isConnected());
     assertTrue(controller.getGameMap().getMap().containsKey("(0, 0)"));
     assertTrue(controller.getGameMap().getMap().containsKey("(0, 1)"));
     assertFalse(controller.getGameMap().getMap().containsKey("(2, 0)"));
+    //Now, we reRoll the controller map and create a new Field to compare the maps (Both with the same seeds)
+    Random random = new Random(randomSeed);
+    Random random2 = new Random(randomSeed1);
+    Random random3 = new Random(randomSeed);
+    Random random4 = new Random(randomSeed1);
+    controller.reRollMap(random,7,random2);
+    FieldFactory factory = new FieldFactory();
+    factory.setRandomSeed(random3);
+    factory.setRandomSeed2(random4);
+    Field map = factory.create(7);
+    //We checks the locations in the map
+    for(int i =0;i<7;i++){
+      for(int j=0;j<7;j++){
+        assertEquals(map.getCell(i,j),controller.getGameMap().getCell(i,j));
+      }
+    }
   }
 
   @Test
@@ -90,8 +108,7 @@ class GameControllerTest {
   @Test
   void endTurn() {
     Tactician firstPlayer = controller.getTurnOwner();
-    // Nuevamente, para determinar el orden de los jugadores se debe usar una semilla
-    Tactician secondPlayer = new Tactician("Player 3",controller.getGameMap()); // <- Deben cambiar esto (!)
+    Tactician secondPlayer = new Tactician("Player 3",controller.getGameMap());
     assertNotEquals(secondPlayer.getName(), firstPlayer.getName());
 
     controller.endTurn();

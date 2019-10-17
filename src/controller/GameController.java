@@ -45,13 +45,8 @@ public class GameController{
     FieldFactory fieldFactory = new FieldFactory();
     this.map = fieldFactory.create(mapSize);
     tacticians = createPlayers(numberOfPlayers);
-    nextRoundOrder = new ArrayList<>();
-    nextRoundOrder.addAll(tacticians);
-    randomSeed = new Random(10);
-    Collections.shuffle(nextRoundOrder, randomSeed);
-    roundOrder = new ArrayList<>();
-    roundOrder.addAll(nextRoundOrder);
-    this.actualPlayer = roundOrder.get(0);
+    prepareFirstRound();
+    randomSeed = null;
     this.roundNumber = 0;
     this.maxRounds = -1;
   }
@@ -406,12 +401,30 @@ public class GameController{
       roundOrder.addAll(nextRoundOrder);
     }
     else {
+      if(randomSeed==null){
+        randomSeed = new Random();
+      }
       roundOrder.addAll(tacticians);
       Collections.shuffle(roundOrder, randomSeed);
       while (roundOrder.get(0) == nextRoundOrder.get(tacticians.size() - 1))
         Collections.shuffle(roundOrder, randomSeed);
       nextRoundOrder.addAll(roundOrder);
     }
+  }
+
+  /**
+   * Prepares the first round
+   */
+  public void prepareFirstRound(){
+    if(randomSeed == null){
+      randomSeed = new Random();
+    }
+    nextRoundOrder = new ArrayList<>();
+    nextRoundOrder.addAll(tacticians);
+    Collections.shuffle(nextRoundOrder, randomSeed);
+    roundOrder = new ArrayList<>();
+    roundOrder.addAll(nextRoundOrder);
+    actualPlayer = roundOrder.get(0);
   }
 
   /**
@@ -492,11 +505,9 @@ public class GameController{
   /**
    * Changes the map for a new one (for tests)
    * @param seed
-   *      Cell seed
+   *      Connections seed
    * @param size
    *      Size of the map
-   * @param seed2
-   *      Connections seed
    */
   public void reRollMap(Random seed,int size,Random seed2){
     FieldFactory fieldFactory = new FieldFactory();
@@ -598,4 +609,7 @@ public class GameController{
     }
   }
 
+  public void setRandomSeed(Random randomSeed) {
+    this.randomSeed = randomSeed;
+  }
 }
