@@ -62,3 +62,6 @@ Para esta entrega se pedia implementar un controlador para el juego, además de 
 - El resto de los jugadores se han retirado: Para esto en el método removeTactician(), si al eliminar un Tactician quedaba solo uno, entonces llamaba al método EndGame, el cual cambia los ganadores en el controller dependiendo del caso en que se encuentre.
 
 - Se alcanza la máxima cantidad de rondas. En este caso gana el jugador con mayor cantidad de unidades, si son iguales, empatan: En el método EndTurn, si es el último turno del último round, entones se llama al método EndGame(), el cual contara las unidades de cada jugador y cambiara la lista de los ganadores. 
+
+## Ejecución del programa
+Para ejecutar el programa, basta correr los test ubicados en la carpeta "test".
