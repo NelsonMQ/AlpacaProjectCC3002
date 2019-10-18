@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -58,12 +60,6 @@ class GameControllerTest {
    */
   @Test
   void getGameMap() {
-    Field gameMap = controller.getGameMap();
-    assertEquals(7, gameMap.getSize());
-    assertTrue(controller.getGameMap().isConnected());
-    assertTrue(controller.getGameMap().getMap().containsKey("(0, 0)"));
-    assertTrue(controller.getGameMap().getMap().containsKey("(0, 1)"));
-    assertFalse(controller.getGameMap().getMap().containsKey("(2, 0)"));
     //Now, we reRoll the controller map and create a new Field to compare the maps (Both with the same seeds)
     Random random = new Random(randomSeed);
     Random random2 = new Random(randomSeed1);
@@ -74,10 +70,22 @@ class GameControllerTest {
     factory.setRandomSeed(random3);
     factory.setRandomSeed2(random4);
     Field map = factory.create(7);
-    //We checks the locations in the map
+    assertEquals(7, controller.getGameMap().getSize());
+    assertTrue(controller.getGameMap().isConnected());
+    assertEquals(7, map.getSize());
+    assertTrue(map.isConnected());
+    //We check the locations in the map
     for(int i =0;i<7;i++){
       for(int j=0;j<7;j++){
         assertEquals(map.getCell(i,j),controller.getGameMap().getCell(i,j));
+        List<Location> controllerNeighbours = new ArrayList<>(controller.getGameMap().getCell(i,j).getNeighbours());
+        List<Location> mapNeighbours = new ArrayList<>(map.getCell(i,j).getNeighbours());
+        //Here we check the connections are the same.
+        controllerNeighbours.containsAll(mapNeighbours);
+        mapNeighbours.containsAll(controllerNeighbours);
+        for (Location location : mapNeighbours) {
+          assertTrue(controllerNeighbours.contains(location));
+        }
       }
     }
   }
