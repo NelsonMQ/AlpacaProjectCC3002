@@ -19,7 +19,7 @@ Para el último requisito, se añadieron nuevas clases al programa, una para la 
 Para la ejecución del programa basta correr los test ubicados en la carpeta "test".
 
 # Segunda Entrega
-Para esta entrega se pedia implementar un controlador para el juego, además de una entidad Tactician que representaría a cada jugador dentro del juego. A continuación veremos lo principal a implementar en cada uno, y la solución que se dio a estas.
+Para esta entrega se pedia implementar un controlador para el juego, además de una entidad Tactician que representaría a cada jugador dentro del juego. A continuación veremos lo principal a implementar en cada uno, y la solución que se dio a estas. En cuanto a los errores de la Tarea 1, no hubieron, por lo que no se mencionará nada al respecto.
 
 ## Tactician
 
