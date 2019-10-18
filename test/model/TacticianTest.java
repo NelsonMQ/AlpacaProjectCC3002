@@ -13,72 +13,93 @@ public class TacticianTest {
     private long randomSeed;
     private long randomSeed2;
 
+    /**
+     * Initializes the vars of the test
+     */
     @BeforeEach
     public void setUp() {
         randomSeed = 10;
         randomSeed2 = 5;
-        controller = new GameController(4,7);
-        controller.reRollMap(new Random(randomSeed),7,new Random(randomSeed2));
+        controller = new GameController(4, 7);
+        controller.reRollMap(new Random(randomSeed), 7, new Random(randomSeed2));
     }
 
+    /**
+     * Checks the getUnitData method
+     */
     @Test
     public void getUnitDataTest() {
-        controller.assignSwordMasterToActualPlayer(0,0);
-        controller.selectUnitIn(0,0);
-        assertEquals(50,controller.getTurnOwner().getSelectedUnitMaxHP());
-        assertEquals(50,controller.getTurnOwner().getSelectedUnitCurrentHitPoints());
-        assertEquals(1,controller.getTurnOwner().getSelectedUnitMovement());
+        controller.assignSwordMasterToActualPlayer(0, 0);
+        controller.selectUnitIn(0, 0);
+        assertEquals(50, controller.getTurnOwner().getSelectedUnitMaxHP());
+        assertEquals(50, controller.getTurnOwner().getSelectedUnitCurrentHitPoints());
+        assertEquals(1, controller.getTurnOwner().getSelectedUnitMovement());
     }
 
+    /**
+     * Checks the getItemData method
+     */
     @Test
     public void getItemDataTest() {
-        controller.assignSwordMasterToActualPlayer(0,0);
-        controller.selectUnitIn(0,0);
+        controller.assignSwordMasterToActualPlayer(0, 0);
+        controller.selectUnitIn(0, 0);
         controller.addSwordToSelectedUnit();
         controller.selectItem(0);
-        assertEquals("Sword",controller.getTurnOwner().getSelectedItemName());
-        assertEquals(10,controller.getTurnOwner().getSelectedItemPower());
-        assertEquals(1,controller.getTurnOwner().getSelectedItemMinRange());
-        assertEquals(1,controller.getTurnOwner().getSelectedItemMaxRange());
+        assertEquals("Sword", controller.getTurnOwner().getSelectedItemName());
+        assertEquals(10, controller.getTurnOwner().getSelectedItemPower());
+        assertEquals(1, controller.getTurnOwner().getSelectedItemMinRange());
+        assertEquals(1, controller.getTurnOwner().getSelectedItemMaxRange());
     }
 
+    /**
+     * Checks if selectedUnit works correctly
+     */
     @Test
     public void selectUnitTest() {
         controller.initGame(5);
-        controller.assignSorcererToActualPlayer(0,0);
-        controller.getTurnOwner().selectUnitIn(0,0);
+        controller.assignSorcererToActualPlayer(0, 0);
+        controller.getTurnOwner().selectUnitIn(0, 0);
         assertNotNull(controller.getTurnOwner().getSelectedUnit());
     }
 
+    /**
+     * Checks if the equipItem works correctly.
+     */
     @Test
     public void equipItemToSelectUnitTest() {
         controller.initGame(5);
-        controller.assignSorcererToActualPlayer(0,0);
-        controller.getTurnOwner().selectUnitIn(0,0);
+        controller.assignSorcererToActualPlayer(0, 0);
+        controller.getTurnOwner().selectUnitIn(0, 0);
         controller.addLightToSelectedUnit();
         assertNull(controller.getSelectedUnit().getEquippedItem());
         controller.getTurnOwner().equipItemToSelectedUnit(0);
         assertNotNull(controller.getTurnOwner().getSelectedUnit().getEquippedItem());
-        assertEquals("Light",controller.getTurnOwner().getSelectedUnit().getEquippedItem().getName());
+        assertEquals("Light", controller.getTurnOwner().getSelectedUnit().getEquippedItem().getName());
     }
 
+    /**
+     * Checks if giveItem is working correctly.
+     */
     @Test
     public void giveItemToTest() {
-        controller.assignSorcererToActualPlayer(0,0);
-        controller.assignSorcererToActualPlayer(0,1);
-        controller.selectUnitIn(0,0);
+        controller.assignSorcererToActualPlayer(0, 0);
+        controller.assignSorcererToActualPlayer(0, 1);
+        controller.selectUnitIn(0, 0);
         controller.addLightToSelectedUnit();
-        assertEquals(1,controller.getSelectedUnit().getItems().size());
-        controller.selectUnitIn(0,1);
-        assertEquals(0,controller.getSelectedUnit().getItems().size());
-        controller.selectUnitIn(0,0);
+        assertEquals(1, controller.getSelectedUnit().getItems().size());
+        controller.selectUnitIn(0, 1);
+        assertEquals(0, controller.getSelectedUnit().getItems().size());
+        controller.selectUnitIn(0, 0);
         controller.selectItem(0);
-        controller.getTurnOwner().giveItemTo(0,1);
-        assertEquals(0,controller.getSelectedUnit().getItems().size());
-        controller.getTurnOwner().selectUnitIn(0,1);
-        assertEquals(1,controller.getSelectedUnit().getItems().size());
+        controller.getTurnOwner().giveItemTo(0, 1);
+        assertEquals(0, controller.getSelectedUnit().getItems().size());
+        controller.getTurnOwner().selectUnitIn(0, 1);
+        assertEquals(1, controller.getSelectedUnit().getItems().size());
     }
 
+    /**
+     * Checks if useItem works correctly.
+     */
     @Test
     public void useItemOnTest() {
         controller.assignSorcererToActualPlayer(0,0);
@@ -99,6 +120,9 @@ public class TacticianTest {
         assertEquals(50,controller.getSelectedUnit().getCurrentHitPoints());
     }
 
+    /**
+     * Checks if moveUnit works correctly.
+     */
     @Test
     public void moveUnitToTest() {
         controller.initGame(5);
@@ -115,6 +139,9 @@ public class TacticianTest {
         assertNull(controller.getGameMap().getCell(0,1).getUnit());
     }
 
+    /**
+     * Checks if assignUnit works correctly.
+     */
     @Test
     public void assignUnitsTest() {
         controller.initGame(5);
@@ -126,6 +153,9 @@ public class TacticianTest {
         assertNotNull(controller.getGameMap().getCell(0,1).getUnit());
     }
 
+    /**
+     * Checks if addItems is working correctly.
+     */
     @Test
     public void addItemsTest() {
         controller.assignSwordMasterToActualPlayer(0,0);

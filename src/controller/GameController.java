@@ -438,7 +438,7 @@ public class GameController{
       int maxUnitsQuantity = tacticianMaxUnitQuantity();
       for (Tactician tactician : tacticians) {
         if (tactician.getUnits().size() == maxUnitsQuantity)
-          winners.add(tacticians.get(0).getName());
+          winners.add(tactician.getName());
       }
     }
   }

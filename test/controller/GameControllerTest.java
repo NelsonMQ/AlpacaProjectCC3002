@@ -25,6 +25,9 @@ class GameControllerTest {
   private long randomSeed1 = new Random().nextLong();
   private List<String> testTacticians;
 
+  /**
+   * Sets up the controller of the game
+   */
   @BeforeEach
   void setUp() {
     long seed = 10;
@@ -38,6 +41,9 @@ class GameControllerTest {
     controller.prepareFirstRound();
   }
 
+  /**
+   * Checks if getTacticians is working correctly.
+   */
   @Test
   void getTacticians() {
     List<Tactician> tacticians = controller.getTacticians();
@@ -47,6 +53,9 @@ class GameControllerTest {
     }
   }
 
+  /**
+   * Checks if the map is created correctly, and if getGameMap works correctly.
+   */
   @Test
   void getGameMap() {
     Field gameMap = controller.getGameMap();
@@ -73,6 +82,9 @@ class GameControllerTest {
     }
   }
 
+  /**
+   * Checks if getTurnOwner is working correctly.
+   */
   @Test
   void getTurnOwner() {
     controller.initGame(2);
@@ -81,6 +93,9 @@ class GameControllerTest {
     assertEquals("Player 3", controller.getTurnOwner().getName());
   }
 
+  /**
+   * Checks if getRoundNumber works correctly
+   */
   @Test
   void getRoundNumber() {
     controller.initGame(10);
@@ -92,6 +107,9 @@ class GameControllerTest {
     }
   }
 
+  /**
+   * Checks if getMaxRound works correctly.
+   */
   @Test
   void getMaxRounds() {
     Random randomTurnSequence = new Random();
@@ -105,6 +123,9 @@ class GameControllerTest {
     assertEquals(-1, controller.getMaxRounds());
   }
 
+  /**
+   * Checks if endTurn is working correctly.
+   */
   @Test
   void endTurn() {
     Tactician firstPlayer = controller.getTurnOwner();
@@ -116,6 +137,9 @@ class GameControllerTest {
     assertEquals(secondPlayer.getName(), controller.getTurnOwner().getName());
   }
 
+  /**
+   * Checks if removeTactician works correctly.
+   */
   @Test
   void removeTactician() {
     assertEquals(4, controller.getTacticians().size());
@@ -134,6 +158,9 @@ class GameControllerTest {
         .forEach(tactician -> Assertions.assertTrue(testTacticians.contains(tactician.getName())));
   }
 
+  /**
+   * Checks if the winners are the corrects
+   */
   @Test
   void getWinners() {
     controller.initGame(2);
@@ -160,6 +187,9 @@ class GameControllerTest {
     assertTrue(List.of("Player 3").containsAll(controller.getWinners()));
   }
 
+  /**
+   * Checks the getSelectedUnit method.
+   */
   @Test
   void getSelectedUnit() {
     assertNull(controller.getSelectedUnit());
@@ -169,6 +199,9 @@ class GameControllerTest {
     assertEquals(controller.getTurnOwner().getSelectedUnit(),controller.getSelectedUnit());
   }
 
+  /**
+   * Checks if selectedUnit works correctly.
+   */
   @Test
   void selectUnitIn() {
     controller.selectUnitIn(0,0);
@@ -179,6 +212,9 @@ class GameControllerTest {
     assertEquals(unit,controller.getSelectedUnit());
   }
 
+  /**
+   * Checks if getItems is working correctly.
+   */
   @Test
   void getItems() {
     controller.assignSwordMasterToActualPlayer(0,0);
@@ -190,6 +226,9 @@ class GameControllerTest {
     assertEquals(controller.getSelectedUnit().getItems().get(0),controller.getItems().get(0));
   }
 
+  /**
+   * Checks if equipItem is working correctly.
+   */
   @Test
   void equipItem() {
     controller.assignArcherToActualPlayer(0,0);
@@ -200,6 +239,9 @@ class GameControllerTest {
     assertNotNull(controller.getSelectedUnit().getEquippedItem());
   }
 
+  /**
+   * Checks if useItem works correctly.
+   */
   @Test
   void useItemOn() {
     controller.assignFighterToActualPlayer(0,0);
@@ -215,6 +257,9 @@ class GameControllerTest {
     assertEquals(50,controller.getSelectedUnit().getCurrentHitPoints());
   }
 
+  /**
+   * Checks if selectedItem works correctly.
+   */
   @Test
   void selectItem() {
     controller.assignHeroToActualPlayer(0,0);
@@ -228,6 +273,9 @@ class GameControllerTest {
     assertEquals("Darkness", controller.getSelectedItem().getName());
   }
 
+  /**
+   * Checks if giveItemTo works correctly.
+   */
   @Test
   void giveItemTo() {
     controller.assignAlpacaToActualPlayer(0,0);
@@ -246,6 +294,9 @@ class GameControllerTest {
     assertEquals(0,controller.getItems().size());
   }
 
+  /**
+   * Checks if removeUnit works correctly.
+   */
   @Test
   void removeUnitTest() {
     controller.assignSwordMasterToActualPlayer(0,0);
@@ -263,6 +314,9 @@ class GameControllerTest {
     assertNull(controller.getGameMap().getCell(0,1).getUnit());
   }
 
+  /**
+   * Checks if moveSelectedUnit works correctly.
+   */
   @Test
   void moveSelectedUnitTo() {
     controller.assignSwordMasterToActualPlayer(0,0);
@@ -271,6 +325,9 @@ class GameControllerTest {
     assertEquals(controller.getSelectedUnit(),controller.getGameMap().getCell(0,1).getUnit());
   }
 
+  /**
+   * Checks if addItemToSelectedUnit works correctly.
+   */
   @Test
   void addItemToSelectedUnitTest() {
     controller.assignSwordMasterToActualPlayer(0,0);
@@ -282,6 +339,9 @@ class GameControllerTest {
     assertEquals(3,controller.getItems().size());
   }
 
+  /**
+   * Checks if checkHeroes works, and the winners conditions.
+   */
   @Test
   void checkHeroesTest() {
     //We assign units (heroes) and items
@@ -333,5 +393,26 @@ class GameControllerTest {
     //So, the winner should be Player 0
     assertEquals("Player 0",controller.getWinners().get(0));
 
+  }
+
+  /**
+   * Tests a tie game
+   */
+  @Test
+  void tieGameTest() {
+    controller.assignSorcererToActualPlayer(0,0);
+    controller.endTurn();
+    controller.assignSwordMasterToActualPlayer(0,1);
+    controller.endTurn();
+    controller.endTurn();
+    controller.endTurn();
+    controller.initGame(1);
+    controller.endTurn();
+    controller.endTurn();
+    controller.endTurn();
+    controller.endTurn();
+    assertEquals("Player 1",controller.getWinners().get(0));
+    assertEquals("Player 3",controller.getWinners().get(1));
+    assertEquals(2,controller.getWinners().size());
   }
 }
