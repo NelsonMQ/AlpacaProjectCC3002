@@ -423,4 +423,29 @@ class GameControllerTest {
     assertEquals("Player 3",controller.getWinners().get(1));
     assertEquals(2,controller.getWinners().size());
   }
+
+  @Test
+  void tacticianWithoutUnitsTest() {
+    controller.assignSwordMasterToActualPlayer(0,0);
+    controller.endTurn();
+    controller.assignSorcererToActualPlayer(0,1);
+    controller.endTurn();
+    controller.assignClericToActualPlayer(0,2);
+    controller.endTurn();
+    controller.assignAlpacaToActualPlayer(1,0);
+    String winnerName = controller.getTurnOwner().getName();
+    controller.endTurn();
+    controller.initGame(8);
+    Location cell = controller.getGameMap().getCell(0,1);
+    controller.removeUnit(cell.getUnit());
+    assertEquals(3,controller.getTacticians().size());
+    Location cell2 = controller.getGameMap().getCell(0,0);
+    String name = controller.getTurnOwner().getName();
+    controller.removeUnit(cell2.getUnit());
+    assertNotEquals(name,controller.getTurnOwner().getName());
+    Location cell3 = controller.getGameMap().getCell(0,2);
+    controller.removeUnit(cell3.getUnit());
+    assertEquals(1,controller.getWinners().size());
+    assertEquals(controller.getWinners().get(0),winnerName);
+  }
 }

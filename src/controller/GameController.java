@@ -497,6 +497,12 @@ public class GameController{
         if(tactician.getHeroes().contains(unit)){
           tactician.getHeroes().remove(unit);
         }
+        if(tactician.getUnits().size()==0){
+          if(tactician.getName().equals(actualPlayer.getName()))
+            endTurn();
+          removeTactician(tactician.getName());
+          break;
+        }
       }
     }
     refreshMap(map);
