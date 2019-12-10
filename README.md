@@ -19,7 +19,7 @@ Para el último requisito, se añadieron nuevas clases al programa, una para la 
 Para la ejecución del programa basta correr los test ubicados en la carpeta "test".
 
 # Segunda Entrega
-Para esta entrega se pedia implementar un controlador para el juego, además de una entidad Tactician que representaría a cada jugador dentro del juego. A continuación veremos lo principal a implementar en cada uno, y la solución que se dio a estas. En cuanto a los errores de la Tarea 1, no hubieron, por lo que no se mencionará nada al respecto.
+Para esta entrega se pedia implementar un controlador para el juego, además de una entidad Tactician que representaría a cada jugador dentro del juego. A continuación veremos lo principal a implementar en cada uno, y la solución que se dio a estas. En cuanto a los errores de la Tarea 1, no hubieron, pero de todas formas se agregó un método usarItem, el cual llama a atacar o curar dependiendo el caso, esto para facilitar la implementación en la Tarea 2 y no tener que "saber" cual usar.
 
 ## Tactician
 
@@ -27,7 +27,7 @@ Para esta entrega se pedia implementar un controlador para el juego, además de 
 
 - Debe conocer las unidades que posee, y el mapa: En Tactician, se agregaron variables de instancia, una de tipo Field que guarda el mapa, y una lista de unidades, en donde se encuentran las unidades que posee el jugador.
 
-- Puede mover a todas sus unidades, pero solo una vez a cada una dentro del turno: Para lograrlo, se agrego una variable de instancia a Tactician, que corresponde a una lista de Unidades, en donde cada vez que se mueve a una unidad, primero se revisa que este en la lista, y luego al moverla, es eiminada de esta. Cabe destacar que esta lista se rellena al principio de cada turno.
+- Puede mover a todas sus unidades, pero solo una vez a cada una dentro del turno: Para lograrlo, se agrego una variable de instancia a Tactician, que corresponde a una lista de Unidades, en donde cada vez que se mueve a una unidad, primero se revisa que este en la lista, y luego al moverla, es eliminada de esta. Cabe destacar que esta lista se rellena al principio de cada turno.
 
 - Capacidad de ver los datos de sus unidades: para esto se agregaron métodos "getters" que devuelven cada uno de los datos de la unidad seleccionada. Por ejemplo: getSelectedUnitCurrentHP, getSelectedUnitMaxHP, etc.
 
