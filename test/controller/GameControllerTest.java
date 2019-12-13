@@ -1,9 +1,6 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.IntStream;
 import model.Tactician;
 import model.factory.GameMapFactory.FieldFactory;
@@ -95,10 +92,20 @@ class GameControllerTest {
    */
   @Test
   void getTurnOwner() {
+    Random random = new Random(randomSeed);
+    Random random2 = new Random(randomSeed);
+    controller.setRandomSeed(random);
+    controller.prepareFirstRound();
     controller.initGame(2);
-    assertEquals("Player 1", controller.getTurnOwner().getName());
-    controller.endTurn();
-    assertEquals("Player 3", controller.getTurnOwner().getName());
+
+    List<Tactician> players = new ArrayList<>();
+    players.addAll(controller.getTacticians());
+    Collections.shuffle(players,random2);
+
+    for(int i = 0; i<players.size();i++){
+      assertEquals(players.get(i).getName(), controller.getTurnOwner().getName());
+      controller.endTurn();
+    }
   }
 
   /**
@@ -424,6 +431,9 @@ class GameControllerTest {
     assertEquals(2,controller.getWinners().size());
   }
 
+  /**
+   * Checks if the controller removes the tacticians without units.
+   */
   @Test
   void tacticianWithoutUnitsTest() {
     controller.assignSwordMasterToActualPlayer(0,0);

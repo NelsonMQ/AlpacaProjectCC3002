@@ -615,6 +615,10 @@ public class GameController{
     }
   }
 
+  /**
+   * Set the random seed
+   * @param randomSeed the random to be set
+   */
   public void setRandomSeed(Random randomSeed) {
     this.randomSeed = randomSeed;
   }
